@@ -1,5 +1,5 @@
 let nonce = Math.random().toString(36).substring(2, 15);
-let isLoggedIn = true; // Default false
+let isLoggedIn = false; // Default false
 
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true};
