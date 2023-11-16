@@ -16,6 +16,10 @@ h1, h2, h3, h4, p {
     color: white;
 }
 
+textarea {
+    resize: none;
+}
+
 hr {
     color: var(--color-secondary);
 }
@@ -29,7 +33,7 @@ hr {
 }
 
 .button-primary {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary) !important;
     color: var(--color-surface-dark);
     border-style: none;
     padding-left: 2rem;
@@ -37,6 +41,7 @@ hr {
     padding-top: 1rem;
     padding-bottom: 1rem;
     font-weight: 600;
+    box-shadow: none !important;
     transition: filter 0.2s;
 }
 
@@ -53,6 +58,7 @@ hr {
     color: white;
     border-style: none;
     transition: filter 0.2s;
+    text-decoration: none;
 }
 
 .color-dark {

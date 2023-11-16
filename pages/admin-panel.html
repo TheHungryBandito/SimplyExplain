@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +9,40 @@
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <script src="admin-panel.js"></script>
 </head>
+
 <body class="container pb-4 mt-5">
     <div class="row">
+
+        <!-- Navbar -->
         <div class="col-3 nav-drawer background-secondary rounded-4 me-2">
-            <div class="m-2">
+            <div class="m-2 m-sm-1">
                 <h4>Navigation Drawer</h4>
                 <hr>
-                <div>
-                    <img src="../images/motherboard.svg" alt="motherboard-icon">
-                    <p id="dashboard-btn" class="d-inline-block button-discrete p-0">Dashboard</p>
-                </div>
-                <div>
-                    <img src="../images/trash.svg" alt="trash-icon">
-                    <button id="uninstall-btn" class="d-inline-block button-discrete p-0">Uninstall</button>
-                </div>
+                <ul class="list-unstyled">
+                    <li>
+                        <img src="../images/motherboard.svg" alt="motherboard-icon">
+                        <a id="dashboard-btn" href="#dashboard"
+                            class="d-inline-block button-discrete mb-2 p-0">Dashboard</a>
+                    </li>
+                    <li>
+                        <img src="../images/gear.svg" alt="gear-icon">
+                        <a id="options-btn" href="#options" class="d-inline-block button-discrete mb-2 p-0">Options</a>
+                    </li>
+                    <li>
+                        <img src="../images/telephone.svg" alt="telephone-icon">
+                        <a id="contact-btn" href="#contact"
+                            class="d-inline-block button-discrete mb-2 p-0">Contact</a>
+                    </li>
+                    <li>
+                        <img src="../images/trash.svg" alt="trash-icon">
+                        <button id="uninstall-btn"
+                            class="d-inline-block button-discrete mb-2 p-0">Uninstall</button>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="col">
-            <p class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">Menu</p>
+            <p id="dashboard" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Dashboard</p>
             <div class="row">
                 <h1 class="mb-3 text-start col-10">Simply Explain</h1>
                 <div class="col">
@@ -33,13 +50,11 @@
                 </div>
             </div>
             <hr>
+            <!-- Prompt builder -->
             <form>
-                <div class="row mb-3 mt-4">
-                    <label for="api-key" class="col-3 text-start text-color-primary fw-semibold fs-5">API Key</label>
-                    <input type="password" id="api-key" class="col form-control form-dark" placeholder="Enter API Key">
-                </div>
                 <div class="row mb-3">
-                    <label for="reading-level" class="col-3 text-start text-color-primary fw-semibold fs-5">Reading Level</label>
+                    <label for="reading-level" class="col-3 text-start text-color-primary fw-semibold fs-5">Reading
+                        Level</label>
                     <select id="reading-level" class="col form-select form-dark">
                         <option value="beginner" selected>Beginner</option>
                         <option value="intermediate">Intermediate</option>
@@ -59,19 +74,51 @@
                     <input type="text" id="persona" class="col form-control form-dark" placeholder="Language Teacher">
                 </div>
                 <div class="row mb-3">
-                    <label for="word-limit" class="col-3 text-start text-color-primary fw-semibold fs-5">Word Limit</label>
+                    <label for="word-limit" class="col-3 text-start text-color-primary fw-semibold fs-5">Word
+                        Limit</label>
                     <input type="number" id="word-limit" class="col form-control form-dark" placeholder="30">
                 </div>
             </form>
             <hr>
             <div class="row">
-                <div class="col background-secondary-alternate rounded-5 p-4 ms-2 mb-3">
+                <div class="col background-secondary-alternate rounded-5 p-4 ms-2 mb-1">
                     <h2>Result</h2>
                     <p id="prompt" class="text-color-dark mb-0">Prompt</p>
                 </div>
             </div>
-            <article class="row">
-                <div class="col background-secondary-alternate rounded-5 p-4 me-lg-3 ms-lg-2 mb-lg-0 mb-3 ms-2">
+            <hr>
+            <!-- Options -->
+            <form>
+                <p id="options" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Options</p>
+                <div class="row mb-3 mt-4">
+                    <label for="api-key" class="col-3 text-start text-color-primary fw-semibold fs-5">API Key</label>
+                    <input type="password" id="api-key" class="col form-control form-dark" placeholder="Enter API Key">
+                </div>
+                <div class="row mb-3 mt-4">
+                    <label for="llm-model" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                        GPT Version
+                    </label>
+                    <select id="llm-model" class="col form-select form-dark">
+                        <option value="gpt-4" selected>GPT-4</option>
+                        <option value="gpt-3.5-turbo-1106">GPT-3.5 Turbo</option>
+                    </select>
+                </div>
+                <div class="row mb-3 mt-4">
+                    <label for="tts-model" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                        Text-To-Speech (TTS)
+                    </label>
+                    <select id="tts-model" class="col form-select form-dark">
+                        <option value="tts-1" selected>TTS 1 (Open AI)</option>
+                        <option value="tts-1-hd">TTS 1 HD (Open AI)</option>
+                        <option value="tts-chrome">TTS Chrome</option>
+                    </select>
+                </div>
+            </form>
+            <hr>
+
+            <!-- Info -->
+            <article id="info" class="row">
+                <div class="col background-secondary-alternate rounded-5 p-4 me-lg-3 ms-lg-2 mb-md-0 mb-3 ms-2">
                     <h2>What is Simply Explain?</h2>
                     <p class="text-color-dark mb-1">
                         Simply Explain is a chrome extension that leverages Open AI's GPT models to assist users
@@ -79,7 +126,7 @@
                     </p>
                     <br>
                     <p class="text-color-dark mb-0">
-                        With the expanding capabilities of Large-Language-Models (LLM) it is possible to provide 
+                        With the expanding capabilities of Large-Language-Models (LLM) it is possible to provide
                         more accessibility through assistive technology such as 'Simply Explain'. As LLM's are known to
                         have "hallucinations", there is always a chance the response may be incorrect or nonsensical.
                     </p>
@@ -97,12 +144,41 @@
                     </p>
                     <br>
                     <p class="text-color-dark mb-0">
-                        To use Simply Explain please set an API Key which can be found at https://platform.openai.com/account/api-keys.
+                        To use Simply Explain please set an API Key which can be found at
+                        https://platform.openai.com/account/api-keys.
                         The API Key will be saved locally on your PC to be used to send requests to the GPT model.
                     </p>
                     <br>
                 </div>
             </article>
+            <hr>
+
+            <!-- Contact -->
+            <form>
+                <p id="contact" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Contact</p>
+                <div class="row mb-3 mt-4">
+                    <label for="contact-email" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                        Email
+                    </label>
+                    <input type="text" id="contact-email" class="col form-control form-dark"
+                        placeholder="Please enter your email." maxlength="100">
+                </div>
+                <div class="row mb-3 mt-4">
+                    <label for="contact-summary" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                        Summary
+                    </label>
+                    <input type="text" id="contact-summary" class="col form-control form-dark" placeholder="Please enter a title."
+                        maxlength="50">
+                </div>
+                <div class="row mb-3 mt-4">
+                    <label for="contact-content" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                        Content
+                    </label>
+                    <textarea type="text" id="contact-content" class="col form-control form-dark"
+                        placeholder="Please enter a message." cols="40" rows="3"  maxlength="300"></textarea>
+                </div>
+                <button type="submit" id="contact-submit-btn" class="button-primary form-control rounded-2 ms-1">Send</button>
+            </form>
         </div>
     </div>
     <div class="row spacer"></div>
@@ -121,4 +197,5 @@
     </footer>
     <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
