@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simply Explain</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <script src="admin-panel.js"></script>
+</head>
+<body class="container pb-4 mt-5">
+    <div class="row">
+        <div class="col-3 nav-drawer background-secondary rounded-4 me-2">
+            <div class="m-2">
+                <h4>Navigation Drawer</h4>
+                <hr>
+                <div>
+                    <img src="../images/motherboard.svg" alt="motherboard-icon">
+                    <p id="dashboard-btn" class="d-inline-block button-discrete p-0">Dashboard</p>
+                </div>
+                <div>
+                    <img src="../images/trash.svg" alt="trash-icon">
+                    <button id="uninstall-btn" class="d-inline-block button-discrete p-0">Uninstall</button>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <p class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">Menu</p>
+            <div class="row">
+                <h1 class="mb-3 text-start col-10">Simply Explain</h1>
+                <div class="col">
+                    <button id="save-btn" class="button-primary rounded-5">Save</button>
+                </div>
+            </div>
+            <hr>
+            <form>
+                <div class="row mb-3 mt-4">
+                    <label for="api-key" class="col-3 text-start text-color-primary fw-semibold fs-5">API Key</label>
+                    <input type="password" id="api-key" class="col form-control form-dark" placeholder="Enter API Key">
+                </div>
+                <div class="row mb-3">
+                    <label for="reading-level" class="col-3 text-start text-color-primary fw-semibold fs-5">Reading Level</label>
+                    <select id="reading-level" class="col form-select form-dark">
+                        <option value="beginner" selected>Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="row mb-3">
+                    <label for="action" class="col-3 text-start text-color-primary fw-semibold fs-5">Action</label>
+                    <select id="action" class="col form-select form-dark">
+                        <option value="explain the concept of the text" selected>Explain Concept</option>
+                        <option value="re-word the text">Re-word Text</option>
+                        <option value="simplify the text">Simplify Text</option>
+                    </select>
+                </div>
+                <div class="row mb-3">
+                    <label for="persona" class="col-3 text-start text-color-primary fw-semibold fs-5">Persona</label>
+                    <input type="text" id="persona" class="col form-control form-dark" placeholder="Language Teacher">
+                </div>
+                <div class="row mb-3">
+                    <label for="word-limit" class="col-3 text-start text-color-primary fw-semibold fs-5">Word Limit</label>
+                    <input type="number" id="word-limit" class="col form-control form-dark" placeholder="30">
+                </div>
+            </form>
+            <hr>
+            <div class="row">
+                <div class="col background-secondary-alternate rounded-5 p-4 ms-2 mb-3">
+                    <h2>Result</h2>
+                    <p id="prompt" class="text-color-dark mb-0">Prompt</p>
+                </div>
+            </div>
+            <article class="row">
+                <div class="col background-secondary-alternate rounded-5 p-4 me-lg-3 ms-lg-2 mb-lg-0 mb-3 ms-2">
+                    <h2>What is Simply Explain?</h2>
+                    <p class="text-color-dark mb-1">
+                        Simply Explain is a chrome extension that leverages Open AI's GPT models to assist users
+                        with reading and understanding text via Text-To-Speech (TTS).
+                    </p>
+                    <br>
+                    <p class="text-color-dark mb-0">
+                        With the expanding capabilities of Large-Language-Models (LLM) it is possible to provide 
+                        more accessibility through assistive technology such as 'Simply Explain'. As LLM's are known to
+                        have "hallucinations", there is always a chance the response may be incorrect or nonsensical.
+                    </p>
+                </div>
+                <div class="col background-secondary-alternate rounded-5 p-4 ms-lg-0 ms-2">
+                    <h2>Controls</h2>
+                    <p class="text-color-dark mb-1">
+                        1 - Select Text
+                    </p>
+                    <p class="text-color-dark mb-1">
+                        2 - Right-Click (Open Context Menu)
+                    </p>
+                    <p class="text-color-dark mb-1">
+                        3 - Left-Click Explain
+                    </p>
+                    <br>
+                    <p class="text-color-dark mb-0">
+                        To use Simply Explain please set an API Key which can be found at https://platform.openai.com/account/api-keys.
+                        The API Key will be saved locally on your PC to be used to send requests to the GPT model.
+                    </p>
+                    <br>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="row spacer"></div>
+    <footer>
+        <div class="row">
+            <div class="col">
+                <p class="text-center text-color-primary">Simply Explain</p>
+            </div>
+            <div class="col">
+                <p class="text-center text-color-primary">Created by Joshua Crews</p>
+            </div>
+            <div class="col">
+                <p class="text-center text-color-primary">2023</p>
+            </div>
+        </div>
+    </footer>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

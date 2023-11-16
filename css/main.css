@@ -1,0 +1,108 @@
+:root {
+    --color-primary: #a688fa;
+    --color-secondary: #908d96;
+    --color-surface-dark: #1a1625;
+    --color-surface: #2f2b3a;
+    --color-surface-light: #46424f;
+
+    background-color: var(--color-surface-dark);
+}
+
+body {
+    background-color: inherit;
+}
+
+h1, h2, h3, h4, p {
+    color: white;
+}
+
+hr {
+    color: var(--color-secondary);
+}
+
+.text-color-primary {
+    color: var(--color-primary);
+}
+
+.text-color-dark {
+    color: var(--color-secondary)
+}
+
+.button-primary {
+    background-color: var(--color-primary);
+    color: var(--color-surface-dark);
+    border-style: none;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-weight: 600;
+    transition: filter 0.2s;
+}
+
+.button-primary:hover, .button-discrete:hover {
+    filter: brightness(0.85);
+}
+
+.button-primary:active, .button-discrete:active {
+    filter: brightness(0.75);
+}
+
+.button-discrete {
+    background: none;
+    color: white;
+    border-style: none;
+    transition: filter 0.2s;
+}
+
+.color-dark {
+    color: var(--color-surface-dark);
+}
+
+.background-primary {
+    background-color: var(--color-primary);
+}
+
+.background-secondary {
+    background-color: var(--color-surface-light);
+}
+
+.background-secondary-alternate {
+    background-color: var(--color-surface);
+}
+
+.border-primary {
+    border-color: var(--color-primary);
+}
+
+.nav-drawer {
+    max-width: 200px;
+    min-width: 115px;
+}
+
+.form-dark {
+    background-color: var(--color-surface);
+    color: white;
+    border-color: var(--color-surface);
+}
+
+.form-dark:focus {
+    background-color: var(--color-surface);
+    color: white;
+    border-color: var(--color-primary);
+    outline-color: var(--color-primary);
+    box-shadow: 0 0 5px var(--color-primary);
+}
+
+.form-dark::placeholder {
+    color: var(--color-secondary);
+}
+
+.extend-vertical {
+    min-height: 100%;
+    height: 100vh;
+}
+
+.spacer {
+    height: 10vh;
+}
