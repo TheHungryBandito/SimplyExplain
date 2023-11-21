@@ -124,7 +124,24 @@ async function auth() {
     if (url) {
       isLoggedIn = true;
     }
+  }).catch((err) => {
+    console.error("Failure in WebAuthFlow:", err);
   });
+}
+
+// Authenticates user then runs callback.
+async function authFlow(callback) {
+  if (!isLoggedIn)
+  {
+    auth().then((result) => {
+      callback();
+    }).catch((err) => {
+      console.error('Failure to authenticate:', err);
+    });
+    return;
+  }
+
+  callback();
 }
 
 async function openAdminPanel() {
@@ -149,47 +166,30 @@ function main() {
 
   // Right-click menu behaviour
   chrome.contextMenus.onClicked.addListener((info, tab) => {
-    processText(info.selectionText);
+    authFlow(processText.bind(null, info.selectionText));
   });
 
   // Recieve the selected text
   chrome.runtime.onMessage.addListener(
     function (message, sender, sendResponse) {
-      if (!message.text)
-      {
+      if (!message.text) {
         return;
       }
-      processText(message.text);
+      authFlow(processText.bind(null, message.text));
     }
   );
 
   chrome.commands.onCommand.addListener((command) => {
-    if (!isLoggedIn) {
-      auth().then((result) => {
-        openAdminPanel();
-      }).catch((err) => {
-        console.error('Failure to authenticate:', err);
-      });
-      return;
-    }
     getCurrentTabId().then((id) => {
       chrome.scripting.executeScript({
-        target: {tabId: id},
+        target: { tabId: id },
         func: relaySelectedText
       });
-    });    
+    });
   });
 
   chrome.action.onClicked.addListener(function () {
-    if (isLoggedIn) {
-      return openAdminPanel();
-    }
-
-    auth().then((result) => {
-      openAdminPanel();
-    }).catch((err) => {
-      console.error('Failure to authenticate:', err);
-    });
+    authFlow(openAdminPanel);
   });
 }
 
