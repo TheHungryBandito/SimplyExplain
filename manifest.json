@@ -22,7 +22,8 @@
         "contextMenus",
         "identity",
         "storage",
-        "activeTab"
+        "activeTab",
+        "offscreen"
     ],
     "commands": {
         "simply-explain": {

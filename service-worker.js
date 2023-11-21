@@ -1,8 +1,9 @@
 let nonce = Math.random().toString(36).substring(2, 15);
 let isLoggedIn = false; // Default false
+let creatingOffscreen;
 
 async function getCurrentTabId() {
-  let queryOptions = { active: true, lastFocusedWindow: true};
+  let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab.id;
 }
@@ -13,16 +14,56 @@ async function relaySelectedText() {
 
 // Runs text through Text-To-Speech
 async function speakText(text) {
-  chrome.tts.stop();
-  return chrome.tts.speak(
-    text,
-    { 'lang': 'en-US' },
-    function () {
-      if (chrome.runtime.lastError) {
-        console.error('Error: ' + chrome.runtime.lastError.message);
+  return await chrome.storage.sync.get(
+    {
+      "TTS": "tts-1",
+      "Voice": "alloy"
+    })
+    .then(async (syncStorage) => {
+      if (syncStorage.TTS == "tts-1" || syncStorage.TTS == "tts-1-hd") {
+        return await chrome.storage.local.get(["OpenAIKey"]).then(async (storage) => {
+          return await fetch(
+            new URL("https://api.openai.com/v1/audio/speech"), {
+            method: 'POST',
+            headers: {
+              'Authorization': "Bearer " + storage.OpenAIKey,
+              'Content-Type': "application/json"
+            },
+            body: JSON.stringify({
+              "model": syncStorage.TTS.toString(),
+              "input": text.toString(),
+              "voice": syncStorage.Voice.toString()
+            })
+          })
+            .then((response) => {
+              if (!response.ok) {
+                console.error("Fetch request failed - Status: ", response.status);
+                return response;
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(data);
+            }).catch((err) => {
+              console.error('Failure fetching TTS:', err);
+            })
+        });
       }
-    }
-  );
+      else if (syncStorage.TTS == "tts-chrome")
+      {
+        chrome.tts.stop();
+        return chrome.tts.speak(
+          text,
+          { 'lang': 'en-US' },
+          function () {
+            if (chrome.runtime.lastError) {
+              console.error('Error: ' + chrome.runtime.lastError.message);
+            }
+          }
+        );
+      }
+    });
+
 }
 
 async function sendRequestToGPT(text) {
@@ -45,7 +86,7 @@ async function sendRequestToGPT(text) {
   ).then(async function (instructions) {
     return await chrome.storage.local.get(["OpenAIKey"]).then(async (storage) => {
       return await fetch(
-        "https://api.openai.com/v1/chat/completions", {
+        new URL("https://api.openai.com/v1/chat/completions"), {
         method: 'POST',
         headers: {
           'Authorization': "Bearer " + storage.OpenAIKey,
@@ -68,17 +109,17 @@ async function sendRequestToGPT(text) {
       }).then(response => {
         if (!response.ok) {
           console.error("Fetch request failed - Status: ", response.status);
-          return false
+          return false;
         }
         return response.json();
       }).then(data => {
         if (data.error) {
           console.error("API Error");
-          return false
+          return false;
         }
         if (!data.choices[0]) {
           console.error("No response");
-          return false
+          return false;
         }
         return data;
       });
