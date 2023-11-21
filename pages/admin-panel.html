@@ -108,9 +108,16 @@
                         Text-To-Speech (TTS)
                     </label>
                     <select id="tts-model" class="col form-select form-dark">
-                        <option value="tts-1" selected>TTS 1 (Open AI)</option>
-                        <option value="tts-1-hd">TTS 1 HD (Open AI)</option>
-                        <option value="tts-chrome">TTS Chrome</option>
+                        <option value="tts-chrome" selected>TTS Chrome</option>
+                        <option value="tts-1" disabled>TTS 1 (Open AI)</option>
+                        <option value="tts-1-hd" disabled>TTS 1 HD (Open AI)</option>
+                    </select>
+                    <label for="tts-voice" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                        Text-To-Speech (TTS) Voice
+                    </label>
+                    <select id="tts-voice" class="col form-select form-dark">
+                        <option value="disabled" selected>To be Implemented</option>
+                        <option value="alloy" disabled>Alloy</option>
                     </select>
                 </div>
             </form>
