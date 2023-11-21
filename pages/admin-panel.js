@@ -21,7 +21,9 @@ window.onload = () => {
             "ReadingLevel": "unset",
             "Persona": "unset",
             "BotAction": "unset",
-            "WordLimit": "unset"
+            "WordLimit": "unset",
+            "TTS": "unset",
+            "Voice": "unset"
         },
         function updateOptions(botOptions) {
             if (botOptions.ReadingLevel != "unset")
@@ -40,6 +42,14 @@ window.onload = () => {
             {
                 document.getElementById("word-limit").value = botOptions.WordLimit;
             }
+            if (botOptions.TTS != "unset")
+            {
+                document.getElementById("tts-model").value = botOptions.TTS;
+            }
+            if (botOptions.Voice != "unset")
+            {
+                document.getElementById("tts-voice").value = "disabled";
+            }
         }
     );
 
@@ -50,6 +60,8 @@ window.onload = () => {
         const persona = document.getElementById("persona");
         const botAction = document.getElementById("action");
         const wordLimit = document.getElementById("word-limit");
+        const ttsModel = document.getElementById("tts-model");
+        const ttsVoice = document.getElementById("tts-voice");
 
         if (Number.isNaN(wordLimit.value))
         {
@@ -63,7 +75,9 @@ window.onload = () => {
             ReadingLevel: readingLevel.value.toLowerCase(),
             BotAction: botAction.value.toLowerCase(),
             Persona: persona.value.toLowerCase(),
-            WordLimit: wordLimit.value
+            WordLimit: wordLimit.value,
+            TTS: ttsModel.value.toLowerCase(),
+            Voice: "Alloy"
         },
         function () {
             updatePrompt();
@@ -84,18 +98,18 @@ window.onload = () => {
                 "Persona": "teacher",
                 "BotAction": "explain the concept of the text",
                 "ReadingLevel": "beginner",
-                "WordLimit": "30"
+                "WordLimit": "30",
             }, function (botOptions) {
                 // Ensure that 'a' and 'an' are used correctly
                 if (botOptions.ReadingLevel == "beginner")
                 {
-                    prompt.innerText = `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a ${botOptions.ReadingLevel} level. 
-                    Limit responses to ${botOptions.WordLimit} words. If more text is needed, say "I need more text to complete this action.".`;
+                    prompt.textContent = `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a ${botOptions.ReadingLevel} level. 
+                    Limit responses to ${botOptions.WordLimit} words.`;
                 }
                 else
                 {
-                    prompt.innerText = `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at an ${botOptions.ReadingLevel} level. 
-                    Limit responses to ${botOptions.WordLimit} words. If more text is needed, say "I need more text to complete this action.".`;
+                    prompt.textContent = `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at an ${botOptions.ReadingLevel} level. 
+                    Limit responses to ${botOptions.WordLimit} words.`;
                 }
             }
         );
