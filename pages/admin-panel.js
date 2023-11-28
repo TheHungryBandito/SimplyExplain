@@ -40,7 +40,7 @@ window.onload = () => {
             }
             if (botOptions.Voice != "unset")
             {
-                document.getElementById("tts-voice").value = "disabled";
+                document.getElementById("tts-voice").value = botOptions.Voice;
             }
         }
     );
@@ -69,7 +69,7 @@ window.onload = () => {
             Persona: persona.value.toLowerCase(),
             WordLimit: wordLimit.value,
             TTS: ttsModel.value.toLowerCase(),
-            Voice: "Alloy"
+            Voice: ttsVoice.value.toLowerCase()
         },
         function () {
             updatePrompt();
