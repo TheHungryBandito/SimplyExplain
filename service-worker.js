@@ -7,6 +7,7 @@ async function getCurrentTabId() {
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab.id;
 }
+
 // Relay the text the user is selecting to the service worker
 async function relaySelectedText() {
   return await chrome.runtime.sendMessage({
@@ -25,51 +26,66 @@ async function speakText(text) {
     .then(async (syncStorage) => {
       if (syncStorage.TTS == "tts-1" || syncStorage.TTS == "tts-1-hd") {
         return await chrome.storage.local.get(["OpenAIKey"]).then(async (storage) => {
-          return await fetch(
-            new URL("https://api.openai.com/v1/audio/speech"), {
-            method: 'POST',
-            headers: {
-              'Authorization': "Bearer " + storage.OpenAIKey,
-              'Content-Type': "application/json"
-            },
-            body: JSON.stringify({
-              "model": syncStorage.TTS.toString(),
-              "input": text.toString(),
-              "voice": syncStorage.Voice.toString()
-            })
+          return await fetchRequestForOpenAITTS(text, syncStorage.TTS, syncStorage.Voice, storage.OpenAIKey).then((blob) => {
+            setupOffscreenDocument('pages/audio-playback.html', ['AUDIO_PLAYBACK', 'BLOBS'], 'Playing Text-To-Speech');
+            sendBlobToOffscreen(blob);
           })
-            .then((response) => {
-              if (!response.ok) {
-                console.error("Fetch request failed - Status: ", response.status);
-                return response;
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log(data);
-            }).catch((err) => {
-              console.error('Failure fetching TTS:', err);
+            .catch((err) => {
+              console.error('Failed to get OpenAI Text-To-Speech -', err);
+              return false;
             })
         });
       }
-      else if (syncStorage.TTS == "tts-chrome")
-      {
+      else if (syncStorage.TTS == "tts-chrome") {
         chrome.tts.stop();
         return chrome.tts.speak(
           text,
           { 'lang': 'en-US' },
           function () {
             if (chrome.runtime.lastError) {
-              console.error('Error: ' + chrome.runtime.lastError.message);
+              console.error('Chrome TTS failed to speak -' + chrome.runtime.lastError.message);
             }
           }
         );
       }
     });
+}
 
+// Sets up an offscreen document if one does not already exist.
+async function setupOffscreenDocument(url, reasons, justification) {
+  if (await hasOffscreenDocument(url)) {
+    return true;
+  } else {
+    return chrome.offscreen.createDocument({
+      url: url,
+      reasons: reasons,
+      justification: justification,
+    },
+      function () {
+        if (chrome.runtime.lastError) {
+          console.error(`Failed to create offscreen document URL[${url}] JUSTIFICATION[${justification}] -` + chrome.runtime.lastError.message);
+        }
+      });
+  }
 }
 
 async function sendRequestToGPT(text) {
+// Checks if there is an active offscreen.
+async function hasOffscreenDocument(url) {
+  if ('getContexts' in chrome.runtime) {
+    const contexts = await chrome.runtime({
+      contextTypes: ['OFFSCREEN_DOCUMENT'],
+      documentUrls: [url]
+    });
+    return Boolean(contexts.length);
+  } else {
+    const matchedClients = await clients.matchAll();
+    return await matchedClients.some(client => {
+      client.url.includes(chrome.runtime.id);
+    });
+  }
+}
+
   return await chrome.storage.sync.get({
     "Persona": "teacher",
     "BotAction": "explain the concept of the text",
@@ -139,6 +155,27 @@ async function processText(text) {
     console.log(data.choices[0].message.content);
     speakText(data.choices[0].message.content);
   });
+// Sends API request to TTS model, returns mp3/mpeg blob.
+async function fetchRequestForOpenAITTS(text, model, voice, apiKey) {
+  return await fetch(
+    new URL("https://api.openai.com/v1/audio/speech"), {
+    method: 'POST',
+    headers: {
+      'Authorization': "Bearer " + apiKey,
+      'Content-Type': "application/json"
+    },
+    body: JSON.stringify({
+      "model": model,
+      "input": text,
+      "voice": voice
+    })
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Fetch Failed: ${response.statusText} Status: ${response.status}`);
+      }
+      return response.blob();
+    })
 }
 
 // Uninstalls the chrome extension from the user's browser
@@ -198,6 +235,24 @@ async function openAdminPanel() {
 }
 
 function main() {
+// Converts blob to json.stringify()-able format then sends it to offscreen.
+function sendBlobToOffscreen() {
+  var reader = new FileReader();
+  reader.readAsDataURL(blob);
+  reader.onloadend = () => {
+    var base64String = reader.result.split(',')[1];
+    chrome.runtime.sendMessage({
+      text: base64String,
+      target: 'offscreen',
+    }, (response) => {
+      console.log("recieved", response);
+    })
+      .catch((err) => {
+        console.error("Failed to send message to offscreen -", err);
+      });
+  }
+}
+
   // Right-click context menu replaces itself with new selection.
   chrome.contextMenus.removeAll(function () {
     chrome.contextMenus.create({
