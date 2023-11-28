@@ -8,14 +8,6 @@ window.onload = () => {
     dashboardBtn.addEventListener("click", location.reload);
     uninstallBtn.addEventListener("click", uninstall);
 
-    chrome.storage.local.get({"OpenAIKey": "unset"}, function loadKey(storage) {
-        if (storage.OpenAIKey == "unset")
-        {
-            return;
-        }
-        document.getElementById("api-key").value = storage.OpenAIKey;
-    });
-
     chrome.storage.sync.get(
         {
             "ReadingLevel": "unset",
