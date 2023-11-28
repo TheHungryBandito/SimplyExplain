@@ -9,7 +9,10 @@ async function getCurrentTabId() {
 }
 // Relay the text the user is selecting to the service worker
 async function relaySelectedText() {
-  return await chrome.runtime.sendMessage({ text: getSelection().toString() });
+  return await chrome.runtime.sendMessage({
+    type: "selectionText",
+    text: getSelection().toString()
+  });
 }
 
 // Runs text through Text-To-Speech
@@ -213,6 +216,9 @@ function main() {
   // Recieve the selected text
   chrome.runtime.onMessage.addListener(
     function (message, sender, sendResponse) {
+      if (!message.type !== "selectionText") {
+        return;
+      }
       if (!message.text) {
         return;
       }
