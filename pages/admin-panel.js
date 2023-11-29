@@ -8,42 +8,61 @@ window.onload = () => {
     dashboardBtn.addEventListener("click", location.reload);
     uninstallBtn.addEventListener("click", uninstall);
 
-    chrome.storage.sync.get(
-        {
-            "ReadingLevel": "unset",
-            "Persona": "unset",
-            "BotAction": "unset",
-            "WordLimit": "unset",
-            "TTS": "unset",
-            "Voice": "unset"
-        },
-        function updateOptions(botOptions) {
-            if (botOptions.ReadingLevel != "unset")
+    loadOptions();
+
+
+    function loadOptions()
+    {
+        chrome.storage.local.get(["OpenAIKey"]).then((storage) => {
+            if (storage.OpenAIKey)
             {
-                document.getElementById("reading-level").value = botOptions.ReadingLevel;
+                document.getElementById("api-key").value = storage.OpenAIKey;
             }
-            if (botOptions.Persona != "unset")
+        });
+
+        chrome.storage.sync.get(
             {
-                document.getElementById("persona").value = botOptions.Persona;
+                "ReadingLevel": "unset",
+                "Persona": "unset",
+                "BotAction": "unset",
+                "WordLimit": "unset",
+                "TTS": "unset",
+                "GPT": "unset",
+                "Voice": "unset"
+            },
+            function updateOptionFields(botOptions) {
+                // Only set if values are found in storage, so placeholders take place.
+                if (botOptions.ReadingLevel != "unset")
+                {
+                    document.getElementById("reading-level").value = botOptions.ReadingLevel;
+                }
+                if (botOptions.Persona != "unset")
+                {
+                    document.getElementById("persona").value = botOptions.Persona;
+                }
+                if (botOptions.BotAction != "unset")
+                {
+                    document.getElementById("action").value = botOptions.BotAction;
+                }
+                if (botOptions.WordLimit != "unset")
+                {
+                    document.getElementById("word-limit").value = botOptions.WordLimit;
+                }
+                if (botOptions.TTS != "unset")
+                {
+                    document.getElementById("tts-model").value = botOptions.TTS;
+                }
+                if (botOptions.GPT != "unset")
+                {
+                    document.getElementById("gpt-model").value = botOptions.GPT;
+                }
+                if (botOptions.Voice != "unset")
+                {
+                    document.getElementById("tts-voice").value = botOptions.Voice;
+                }
             }
-            if (botOptions.BotAction != "unset")
-            {
-                document.getElementById("action").value = botOptions.BotAction;
-            }
-            if (botOptions.WordLimit != "unset")
-            {
-                document.getElementById("word-limit").value = botOptions.WordLimit;
-            }
-            if (botOptions.TTS != "unset")
-            {
-                document.getElementById("tts-model").value = botOptions.TTS;
-            }
-            if (botOptions.Voice != "unset")
-            {
-                document.getElementById("tts-voice").value = botOptions.Voice;
-            }
-        }
-    );
+        );
+    }
 
     // Saves extensions settings
     function save() {
@@ -54,22 +73,24 @@ window.onload = () => {
         const wordLimit = document.getElementById("word-limit");
         const ttsModel = document.getElementById("tts-model");
         const ttsVoice = document.getElementById("tts-voice");
+        const gptModel = document.getElementById("gpt-model");
 
         if (Number.isNaN(wordLimit.value))
         {
             console.log('Word limit is not a number, please use a real number');
-            return;
+            return false;
         }
 
         chrome.storage.local.set({ OpenAIKey: key.value });
 
         chrome.storage.sync.set({
-            ReadingLevel: readingLevel.value.toLowerCase(),
-            BotAction: botAction.value.toLowerCase(),
-            Persona: persona.value.toLowerCase(),
+            ReadingLevel: readingLevel.value.toString().toLowerCase(),
+            BotAction: botAction.value.toString().toLowerCase(),
+            Persona: persona.value.toString().toLowerCase(),
             WordLimit: wordLimit.value,
-            TTS: ttsModel.value.toLowerCase(),
-            Voice: ttsVoice.value.toLowerCase()
+            TTS: ttsModel.value.toString().toLowerCase(),
+            GPT: gptModel.value.toString().toLowerCase(),
+            Voice: ttsVoice.value.toString().toLowerCase()
         },
         function () {
             updatePrompt();

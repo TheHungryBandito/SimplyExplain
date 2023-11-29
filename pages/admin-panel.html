@@ -11,10 +11,6 @@
 </head>
 
 <body class="container pb-4 mt-5">
-    <audio controls id="audio">
-        <source id="audio-src" type="audio/mpeg">
-    </audio>
-    <script src="audio-playback.js"></script>
     <div class="row">
 
         <!-- Navbar -->
@@ -99,10 +95,10 @@
                     <input type="password" id="api-key" class="col form-control form-dark" placeholder="Enter API Key">
                 </div>
                 <div class="row mb-3 mt-4">
-                    <label for="llm-model" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                    <label for="gpt-model" class="col-3 text-start text-color-primary fw-semibold fs-5">
                         GPT Version
                     </label>
-                    <select id="llm-model" class="col form-select form-dark">
+                    <select id="gpt-model" class="col form-select form-dark">
                         <option value="gpt-4" selected>GPT-4</option>
                         <option value="gpt-3.5-turbo-1106">GPT-3.5 Turbo</option>
                     </select>
@@ -120,8 +116,12 @@
                         Text-To-Speech (TTS) Voice
                     </label>
                     <select id="tts-voice" class="col form-select form-dark">
-                        <option value="disabled" selected>To be Implemented</option>
-                        <option value="alloy">Alloy</option>
+                        <option value="alloy" selected>Alloy</option>
+                        <option value="echo">Echo</option>
+                        <option value="fable">Fable</option>
+                        <option value="onyx">Onyx</option>
+                        <option value="nova">Nova</option>
+                        <option value="shimmer">Shimmer</option>
                     </select>
                 </div>
             </form>
