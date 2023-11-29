@@ -113,17 +113,8 @@ window.onload = () => {
                 "ReadingLevel": "beginner",
                 "WordLimit": "30",
             }, function (botOptions) {
-                // Ensure that 'a' and 'an' are used correctly
-                if (botOptions.ReadingLevel == "beginner")
-                {
-                    prompt.textContent = `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a ${botOptions.ReadingLevel} level. 
-                    Limit responses to ${botOptions.WordLimit} words.`;
-                }
-                else
-                {
-                    prompt.textContent = `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at an ${botOptions.ReadingLevel} level. 
-                    Limit responses to ${botOptions.WordLimit} words.`;
-                }
+                prompt.textContent = `Act as a/an ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a/an ${botOptions.ReadingLevel} level of the topic. 
+                Limit responses to ${botOptions.WordLimit} words.`;
             }
         );
     }
