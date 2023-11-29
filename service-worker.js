@@ -69,9 +69,9 @@ async function setupOffscreenDocument(url, reasons, justification) {
 // Checks if there is an active offscreen.
 async function hasOffscreenDocument(url) {
   if ('getContexts' in chrome.runtime) {
-    const contexts = await chrome.runtime({
+    const contexts = await chrome.runtime.getContexts({
       contextTypes: ['OFFSCREEN_DOCUMENT'],
-      documentUrls: [url]
+      documentUrls: [chrome.runtime.getURL(url)]
     });
     return Boolean(contexts.length);
   } else {
