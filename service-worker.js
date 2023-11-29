@@ -1,3 +1,49 @@
+// Sets up events/menus for app.
+function setupExtension() {
+  // Right-click context menu replaces itself with new selection.
+  chrome.contextMenus.removeAll(function () {
+    chrome.contextMenus.create({
+      id: "explain-btn",
+      title: "Explain: '%s'",
+      contexts: ["selection"]
+    });
+  });
+
+  // Right-click menu behaviour
+  chrome.contextMenus.onClicked.addListener((info, tab) => {
+    authFlow(processText.bind(null, info.selectionText));
+  });
+
+  // Recieve the selected text.
+  chrome.runtime.onMessage.addListener(
+    function (message, sender, sendResponse) {
+      if (!message.type !== "selectionText") {
+        return;
+      }
+      if (!message.text) {
+        return;
+      }
+
+      authFlow(processText.bind(null, message.text));
+    }
+  );
+
+  // On Keyboard shortcut, process selected text.
+  chrome.commands.onCommand.addListener((command) => {
+    getCurrentTabId().then((id) => {
+      chrome.scripting.executeScript({
+        target: { tabId: id },
+        func: relaySelectedText
+      });
+    });
+  });
+
+  // When extension icon clicked, open the admin panel.
+  chrome.action.onClicked.addListener(function () {
+    authFlow(openAdminPanel);
+  });
+}
+
 // Gets the user's current active tab.
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
@@ -13,44 +59,10 @@ async function relaySelectedText() {
   });
 }
 
-// Runs text through Text-To-Speech
-async function speakText(text) {
-  return await chrome.storage.sync.get(
-    {
-      "TTS": "tts-1",
-      "Voice": "alloy"
-    })
-    .then(async (syncStorage) => {
-      if (syncStorage.TTS == "tts-1" || syncStorage.TTS == "tts-1-hd") {
-        return await chrome.storage.local.get(["OpenAIKey"]).then(async (storage) => {
-          return await fetchRequestForOpenAITTS(text, syncStorage.TTS, syncStorage.Voice, storage.OpenAIKey).then((blob) => {
-            setupOffscreenDocument('pages/audio-playback.html', ['AUDIO_PLAYBACK', 'BLOBS'], 'Playing Text-To-Speech');
-            sendBlobToOffscreen(blob);
-          })
-            .catch((err) => {
-              console.error('Failed to get OpenAI Text-To-Speech -', err);
-              return false;
-            })
-        });
-      }
-      else if (syncStorage.TTS == "tts-chrome") {
-        chrome.tts.stop();
-        return chrome.tts.speak(
-          text,
-          { 'lang': 'en-US' },
-          function () {
-            if (chrome.runtime.lastError) {
-              console.error('Chrome TTS failed to speak -' + chrome.runtime.lastError.message);
-            }
-          }
-        );
-      }
-    });
-}
-
 // Sets up an offscreen document if one does not already exist.
 async function setupOffscreenDocument(url, reasons, justification) {
   if (await hasOffscreenDocument(url)) {
+    console.log("Offscreen already exists");
     return true;
   } else {
     return chrome.offscreen.createDocument({
@@ -60,7 +72,7 @@ async function setupOffscreenDocument(url, reasons, justification) {
     },
       function () {
         if (chrome.runtime.lastError) {
-          console.error(`Failed to create offscreen document URL[${url}] JUSTIFICATION[${justification}] -` + chrome.runtime.lastError.message);
+          console.error(`Failed to create offscreen document URL: "${url}" JUSTIFICATION: "${justification}" -`, chrome.runtime.lastError.message);
         }
       });
   }
@@ -80,126 +92,6 @@ async function hasOffscreenDocument(url) {
       client.url.includes(chrome.runtime.id);
     });
   }
-}
-
-// Returns current GPT Instructions.
-async function getGPTInstructions() {
-  return await chrome.storage.sync.get({
-    "Persona": "mentor",
-    "BotAction": "explain the concept of the text",
-    "ReadingLevel": "beginner",
-    "WordLimit": "30",
-    "GPTModel": "gpt-3.5"
-  })
-    .then((botOptions) => {
-      // Adjust for grammer/punctuation.
-      if (botOptions.ReadingLevel == "beginner") {
-        return `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a ${botOptions.ReadingLevel} level. 
-                Limit responses to ${botOptions.WordLimit} words. If more text is needed, say "I need more text to complete this action.".`;
-      }
-      else {
-        return `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at an ${botOptions.ReadingLevel} level. 
-                Limit responses to ${botOptions.WordLimit} words. If more text is needed, say "I need more text to complete this action.".`;
-      }
-    })
-    .catch((err) => {
-      console.error('Could not create GPT Instructions', err);
-      return false;
-    });
-}
-
-// Sends API request to GPT model, returns text completion.
-async function fetchCompletionRequestToGPT(instructions, model, text, apiKey) {
-  return await fetch(
-    new URL("https://api.openai.com/v1/chat/completions"), {
-    method: 'POST',
-    headers: {
-      'Authorization': "Bearer " + apiKey,
-      'Content-Type': "application/json"
-    },
-    body: JSON.stringify({
-      "model": model,
-      "messages": [
-        {
-          "role": "system",
-          "content": instructions
-        },
-        {
-          "role": "user",
-          "content": text
-        }
-      ],
-      "temperature": 0.2
-    })
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Fetch request failed - Status: ", ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      if (!data.choices[0]) {
-        throw new Error("GPT could not respond.")
-      }
-      return data;
-    })
-    .catch((err) => {
-      console.err("Failed to send completion request to GPT -", err);
-      return false;
-    });
-}
-
-// Sends API request to TTS model, returns mp3/mpeg blob.
-async function fetchRequestForOpenAITTS(text, model, voice, apiKey) {
-  return await fetch(
-    new URL("https://api.openai.com/v1/audio/speech"), {
-    method: 'POST',
-    headers: {
-      'Authorization': "Bearer " + apiKey,
-      'Content-Type': "application/json"
-    },
-    body: JSON.stringify({
-      "model": model,
-      "input": text,
-      "voice": voice
-    })
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Fetch Failed: ${response.statusText} Status: ${response.status}`);
-      }
-      return response.blob();
-    })
-}
-
-// Gets fetch requirements then returns the text completion data.
-async function getCompletionResults(text) {
-  const instructions = await getGPTInstructions();
-  if (!instructions) {
-    return false;
-  }
-
-  return await chrome.storage.local.get({ "OpenAIKey": false }).then(async (storage) => {
-    if (!storage.OpenAIKey) {
-      throw new Error("No api key found.");
-    }
-    return await fetchCompletionRequestToGPT(instructions, GPTModel, text, storage.OpenAIKey)
-  })
-    .catch((err) => {
-      console.log("Could not find API Key -", err)
-      return false;
-    });
-}
-
-// Gets a response to the text then speaks it.
-async function processText(text) {
-  await getCompletionResults(text).then(data => {
-    speakText(data.choices[0].message.content);
-  });
 }
 
 // Authenticate user with google.
@@ -245,11 +137,11 @@ async function authFlow(callback) {
   if (!userLoggedIn) {
     auth().then(
       function success(result) {
-        console.log(result);
+        console.log("Authentication success.");
         callback();
       },
       function failure(result) {
-        console.log(result);
+        console.log("Authentication failure.");
       })
       .catch((err) => {
         console.error('Failure to authenticate:', err);
@@ -263,21 +155,204 @@ async function authFlow(callback) {
 // Checks if user has previously logged in.
 async function isLoggedIn() {
   return chrome.storage.local.get({
-    "UserID": null
+    "UserID": "None"
   })
     .then((storage) => {
       // If we have a UserID then the user has authenticated.
       if (storage.UserID !== "None") {
-        console.log("Recieved UserID:", storage.UserID);
         return true;
       } else {
-        console.log("No UserID found in storage.");
         return false;
       }
     });
 }
 
-// Opens the admin panel.
+// Processes text through selected text-to-speech.
+async function TextToSpeech(text) {
+  return await chrome.storage.sync.get(
+    {
+      "TTS": "tts-1",
+      "Voice": "alloy"
+    })
+    .then((syncStorage) => {
+      syncStorage.TTS = syncStorage.TTS.toString().toLowerCase();
+      syncStorage.Voice = syncStorage.Voice.toString().toLowerCase();
+      return syncStorage;
+    })
+    .then(async (syncStorage) => {
+      if (syncStorage.TTS == "tts-1" || syncStorage.TTS == "tts-1-hd") {
+        return await chrome.storage.local.get(["OpenAIKey"]).then(async (storage) => {
+          return await fetchRequestForOpenAITTS(text, syncStorage.TTS, syncStorage.Voice, storage.OpenAIKey)
+            .then(async (blob) => {
+              await setupOffscreenDocument('pages/audio-playback.html', ['AUDIO_PLAYBACK', 'BLOBS'], 'Playing Text-To-Speech').then(() => {
+                // Slight delay to allow page to subscribe to messages.
+                setTimeout(sendBlobToOffscreen.bind(null, blob), 500);
+              });
+            })
+            .catch((err) => {
+              console.error('Failed to get OpenAI Text-To-Speech -', err);
+              return false;
+            })
+        });
+      }
+      else if (syncStorage.TTS == "tts-chrome") {
+        chrome.tts.stop();
+        return chrome.tts.speak(
+          text,
+          { 'lang': 'en-US' },
+          function () {
+            if (chrome.runtime.lastError) {
+              console.error('Chrome TTS failed to speak -', chrome.runtime.lastError.message);
+            }
+          }
+        );
+      }
+    });
+}
+
+// Returns current GPT Instructions.
+async function getGPTInstructions() {
+  return await chrome.storage.sync.get({
+    "Persona": "mentor",
+    "BotAction": "explain the concept of the text",
+    "ReadingLevel": "beginner",
+    "WordLimit": "30",
+  })
+    .then((botOptions) => {
+      if (Number.isNaN(botOptions.WordLimit)) {
+        throw new Error("Saved word limit is not a number");
+      }
+      botOptions.Persona = botOptions.Persona.toString().toLowerCase();
+      botOptions.BotAction = botOptions.BotAction.toString().toLowerCase();
+      botOptions.ReadingLevel = botOptions.ReadingLevel.toString().toLowerCase();
+      return botOptions;
+    })
+    .then((botOptions) => {
+      // Adjust for grammer/punctuation.
+      if (botOptions.ReadingLevel == "beginner") {
+        return `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a ${botOptions.ReadingLevel} level. 
+              Limit responses to ${botOptions.WordLimit} words. If more text is needed, say "I need more text to complete this action.".`;
+      }
+      else {
+        return `You are a ${botOptions.Persona} and ${botOptions.BotAction} the user provides at an ${botOptions.ReadingLevel} level. 
+              Limit responses to ${botOptions.WordLimit} words. If more text is needed, say "I need more text to complete this action.".`;
+      }
+    })
+    .catch((err) => {
+      console.error('Could not create GPT Instructions', err);
+      return false;
+    });
+}
+
+// Sends API request to GPT model, returns text completion.
+async function fetchCompletionRequestToGPT(instructions, model, text, apiKey) {
+  return await fetch(
+    new URL("https://api.openai.com/v1/chat/completions"), {
+    method: 'POST',
+    headers: {
+      'Authorization': "Bearer " + apiKey,
+      'Content-Type': "application/json"
+    },
+    body: JSON.stringify({
+      "model": model,
+      "messages": [
+        {
+          "role": "system",
+          "content": instructions
+        },
+        {
+          "role": "user",
+          "content": text
+        }
+      ],
+      "temperature": 0.2
+    })
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Fetch Failed: ${response.statusText} Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      if (!data.choices[0]) {
+        throw new Error("GPT could not respond.")
+      }
+      return data;
+    })
+    .catch((err) => {
+      console.error("Failed to send completion request to GPT -", err);
+    });
+}
+
+// Sends API request to TTS model, returns mp3/mpeg blob.
+async function fetchRequestForOpenAITTS(text, model, voice, apiKey) {
+  return await fetch(
+    new URL("https://api.openai.com/v1/audio/speech"), {
+    method: 'POST',
+    headers: {
+      'Authorization': "Bearer " + apiKey,
+      'Content-Type': "application/json"
+    },
+    body: JSON.stringify({
+      "model": model,
+      "input": text,
+      "voice": voice
+    })
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Fetch Failed: ${response.statusText} Status: ${response.status}`);
+      }
+      return response.blob();
+    })
+}
+
+// Gets fetch requirements then returns the text completion data.
+async function getCompletionResults(text) {
+  const instructions = await getGPTInstructions();
+  if (!instructions) {
+    return false;
+  }
+
+  return await chrome.storage.local.get({ "OpenAIKey": false }).then(async (storage) => {
+    if (!storage.OpenAIKey) {
+      throw new Error("No api key found.");
+    }
+    return await chrome.storage.sync.get({ "GPT": "gpt-3.5-turbo-1106" }).then(async (syncStorage) => {
+      return await fetchCompletionRequestToGPT(instructions, syncStorage.GPT, text, storage.OpenAIKey);
+    }).catch((err) => {
+      console.err("Could not retrive selected GPT model from storage -", err);
+    });
+  })
+    .catch((err) => {
+      console.error("Could not retrieve API Key from storage -", err)
+    });
+}
+
+// Processes text through GPT then provides the result via TTS.
+async function processText(text) {
+  await getCompletionResults(text).then(data => {
+    if (!data.choices) {
+      throw new Error("No completion result found.");
+    }
+    TextToSpeech(data.choices[0].message.content);
+    chrome.notifications.create({
+      iconUrl: chrome.runtime.getURL("images/person-raised-hand128.png"),
+      title: "Simply Explain",
+      type: "basic",
+      message: data.choices[0].message.content
+    });
+  })
+    .catch((err) => {
+      console.error("Could not process text -", err);
+    });
+}
+
+// Opens the admin panel as a new tab to the current window.
 async function openAdminPanel() {
   let currentTab = await chrome.tabs.query({ active: true });
   chrome.tabs.create({
@@ -288,72 +363,28 @@ async function openAdminPanel() {
 }
 
 // Converts blob to json.stringify()-able format then sends it to offscreen.
-function sendBlobToOffscreen() {
+function sendBlobToOffscreen(blob) {
   var reader = new FileReader();
   reader.readAsDataURL(blob);
-  reader.onloadend = () => {
+  reader.onloadend = async function sendDataURLContentToOffscreen() {
+    if (!reader.result) {
+      return;
+    }
     var base64String = reader.result.split(',')[1];
     chrome.runtime.sendMessage({
       text: base64String,
       target: 'offscreen',
-    }, (response) => {
-      console.log("recieved", response);
+    }, () => {
+      if (chrome.runtime.lastError) {
+        console.error("Failed to send message to offscreen document -", chrome.runtime.lastError.message);
+      }
     })
-      .catch((err) => {
-        console.error("Failed to send message to offscreen -", err);
-      });
-  }
+  };
 }
 
-// Uninstalls the chrome extension from the user's browser
 function uninstall() {
   chrome.management.uninstallSelf({
     showConfirmDialog: true
-  });
-}
-
-// Sets up events/menus for app.
-function setupExtension() {
-  // Right-click context menu replaces itself with new selection.
-  chrome.contextMenus.removeAll(function () {
-    chrome.contextMenus.create({
-      id: "explain-btn",
-      title: "Explain: '%s'",
-      contexts: ["selection"]
-    });
-  });
-
-  // Right-click menu behaviour
-  chrome.contextMenus.onClicked.addListener((info, tab) => {
-    authFlow(processText.bind(null, info.selectionText));
-  });
-
-  // Recieve the selected text.
-  chrome.runtime.onMessage.addListener(
-    function (message, sender, sendResponse) {
-      if (!message.type !== "selectionText") {
-        return;
-      }
-      if (!message.text) {
-        return;
-      }
-      authFlow(processText.bind(null, message.text));
-    }
-  );
-
-  // On Keyboard shortcut, process selected text.
-  chrome.commands.onCommand.addListener((command) => {
-    getCurrentTabId().then((id) => {
-      chrome.scripting.executeScript({
-        target: { tabId: id },
-        func: relaySelectedText
-      });
-    });
-  });
-
-  // When extension icon clicked, open the admin panel.
-  chrome.action.onClicked.addListener(function () {
-    authFlow(openAdminPanel);
   });
 }
 

@@ -23,7 +23,8 @@
         "identity",
         "storage",
         "activeTab",
-        "offscreen"
+        "offscreen",
+        "notifications"
     ],
     "commands": {
         "simply-explain": {
