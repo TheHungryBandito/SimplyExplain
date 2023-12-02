@@ -328,7 +328,7 @@ async function getCompletionResults(text) {
 
 // Processes text through GPT then provides the result via TTS.
 async function processText(text) {
-  await getCompletionResults(text).then(data => {
+  await getCompletionResults(text).then(async (data) => {
     if (!data.choices) {
       throw new Error("No completion result found.");
     }
