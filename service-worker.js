@@ -168,7 +168,7 @@ async function isLoggedIn() {
 }
 
 // Processes text through selected text-to-speech.
-async function TextToSpeech(text) {
+async function textToSpeech(text) {
   return await chrome.storage.sync.get(
     {
       "TTS": "tts-1",
@@ -332,13 +332,13 @@ async function processText(text) {
     if (!data.choices) {
       throw new Error("No completion result found.");
     }
-    TextToSpeech(data.choices[0].message.content);
     chrome.notifications.create({
       iconUrl: chrome.runtime.getURL("images/person-raised-hand128.png"),
       title: "Simply Explain",
       type: "basic",
       message: data.choices[0].message.content
     });
+    await textToSpeech(data.choices[0].message.content);
   })
     .catch((err) => {
       console.error("Could not process text -", err);
