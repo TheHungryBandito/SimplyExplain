@@ -332,17 +332,25 @@ async function processText(text) {
     if (!data.choices) {
       throw new Error("No completion result found.");
     }
-    chrome.notifications.create({
-      iconUrl: chrome.runtime.getURL("images/person-raised-hand128.png"),
-      title: "Simply Explain",
-      type: "basic",
-      message: data.choices[0].message.content
-    });
     await textToSpeech(data.choices[0].message.content);
+    await sendNotification("Simply Explain", "basic", data.choices[0].message.content);
   })
     .catch((err) => {
       console.error("Could not process text -", err);
     });
+}
+
+async function sendNotification(title, type, message) {
+  chrome.notifications.create({
+    iconUrl: chrome.runtime.getURL("images/person-raised-hand128.png"),
+    title: title,
+    type: type,
+    message: message
+  }), () => {
+    if (chrome.runtime.lastError) {
+      console.error("Failed to send notifcation -", chrome.runtime.lastError.message);
+    }
+  };
 }
 
 // Opens the admin panel as a new tab to the current window.
