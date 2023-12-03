@@ -30,13 +30,11 @@
                     </li>
                     <li>
                         <img src="../images/telephone.svg" alt="telephone-icon">
-                        <a id="contact-btn" href="#contact"
-                            class="d-inline-block button-discrete mb-2 p-0">Contact</a>
+                        <a id="contact-btn" href="#contact" class="d-inline-block button-discrete mb-2 p-0">Contact</a>
                     </li>
                     <li>
                         <img src="../images/trash.svg" alt="trash-icon">
-                        <button id="uninstall-btn"
-                            class="d-inline-block button-discrete mb-2 p-0">Uninstall</button>
+                        <button id="uninstall-btn" class="d-inline-block button-discrete mb-2 p-0">Uninstall</button>
                     </li>
                 </ul>
             </div>
@@ -45,14 +43,12 @@
             <p id="dashboard" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Dashboard</p>
             <div class="row">
                 <h1 class="mb-3 text-start col-10">Simply Explain</h1>
-                <div class="col">
-                    <button id="save-btn" class="button-primary rounded-5">Save</button>
-                </div>
+
             </div>
             <hr>
             <!-- Prompt builder -->
             <form>
-                <div class="row mb-3">
+                <div class="row mb-3 align-items-center">
                     <label for="reading-level" class="col-3 text-start text-color-primary fw-semibold fs-5">Reading
                         Level</label>
                     <select id="reading-level" class="col form-select form-dark">
@@ -61,7 +57,7 @@
                         <option value="advanced">Advanced</option>
                     </select>
                 </div>
-                <div class="row mb-3">
+                <div class="row mb-3 align-items-center">
                     <label for="action" class="col-3 text-start text-color-primary fw-semibold fs-5">Action</label>
                     <select id="action" class="col form-select form-dark">
                         <option value="explain the concept of the text" selected>Explain Concept</option>
@@ -69,14 +65,17 @@
                         <option value="simplify the text">Simplify Text</option>
                     </select>
                 </div>
-                <div class="row mb-3">
+                <div class="row mb-3 align-items-center">
                     <label for="persona" class="col-3 text-start text-color-primary fw-semibold fs-5">Persona</label>
                     <input type="text" id="persona" class="col form-control form-dark" placeholder="Language Teacher">
                 </div>
-                <div class="row mb-3">
+                <div class="row mb-3 align-items-center">
                     <label for="word-limit" class="col-3 text-start text-color-primary fw-semibold fs-5">Word
                         Limit</label>
                     <input type="number" id="word-limit" class="col form-control form-dark" placeholder="30">
+                    <div class="col-2">
+                        <button id="save-prompt-btn" class="button-primary rounded-5">Save</button>
+                    </div>
                 </div>
             </form>
             <hr>
@@ -90,11 +89,11 @@
             <!-- Options -->
             <form>
                 <p id="options" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Options</p>
-                <div class="row mb-3 mt-4">
+                <div class="row mb-3 mt-4 align-items-center">
                     <label for="api-key" class="col-3 text-start text-color-primary fw-semibold fs-5">API Key</label>
                     <input type="password" id="api-key" class="col form-control form-dark" placeholder="Enter API Key">
                 </div>
-                <div class="row mb-3 mt-4">
+                <div class="row mb-3 mt-4 align-items-center">
                     <label for="gpt-model" class="col-3 text-start text-color-primary fw-semibold fs-5">
                         GPT Version
                     </label>
@@ -103,17 +102,25 @@
                         <option value="gpt-3.5-turbo-1106">GPT-3.5 Turbo</option>
                     </select>
                 </div>
-                <div class="row mb-3 mt-4">
+                <div class="row mb-3 mt-4 align-items-center">
+                    <label for="tts-enabled" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                        Voice Enabled
+                    </label>
+                    <input id="tts-enabled" class="form-check-input form-dark p-4 checkbox-primary" type="checkbox" value="enabled" checked></input>
+                </div>
+                <div class="row mb-3 mt-4 align-items-center">
                     <label for="tts-model" class="col-3 text-start text-color-primary fw-semibold fs-5">
-                        Text-To-Speech (TTS)
+                        Voice Model
                     </label>
                     <select id="tts-model" class="col form-select form-dark">
                         <option value="tts-chrome" selected>TTS Chrome</option>
                         <option value="tts-1">TTS 1 (Open AI)</option>
                         <option value="tts-1-hd">TTS 1 HD (Open AI)</option>
                     </select>
+                </div>
+                <div class="row mb-3 mt-4 align-items-center">
                     <label for="tts-voice" class="col-3 text-start text-color-primary fw-semibold fs-5">
-                        Text-To-Speech (TTS) Voice
+                        Voice
                     </label>
                     <select id="tts-voice" class="col form-select form-dark">
                         <option value="alloy" selected>Alloy</option>
@@ -123,6 +130,9 @@
                         <option value="nova">Nova</option>
                         <option value="shimmer">Shimmer</option>
                     </select>
+                    <div class="col-2">
+                        <button id="save-options-btn" class="button-primary rounded-5">Save</button>
+                    </div>
                 </div>
             </form>
             <hr>
@@ -167,28 +177,29 @@
             <!-- Contact -->
             <form>
                 <p id="contact" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Contact</p>
-                <div class="row mb-3 mt-4">
+                <div class="row mb-3 mt-4 align-items-center">
                     <label for="contact-email" class="col-3 text-start text-color-primary fw-semibold fs-5">
                         Email
                     </label>
                     <input type="text" id="contact-email" class="col form-control form-dark"
                         placeholder="Please enter your email." maxlength="100">
                 </div>
-                <div class="row mb-3 mt-4">
+                <div class="row mb-3 mt-4 align-items-center">
                     <label for="contact-summary" class="col-3 text-start text-color-primary fw-semibold fs-5">
                         Summary
                     </label>
-                    <input type="text" id="contact-summary" class="col form-control form-dark" placeholder="Please enter a title."
-                        maxlength="50">
+                    <input type="text" id="contact-summary" class="col form-control form-dark"
+                        placeholder="Please enter a title." maxlength="50">
                 </div>
-                <div class="row mb-3 mt-4">
+                <div class="row mb-3 mt-4 align-items-center">
                     <label for="contact-content" class="col-3 text-start text-color-primary fw-semibold fs-5">
                         Content
                     </label>
                     <textarea type="text" id="contact-content" class="col form-control form-dark"
-                        placeholder="Please enter a message." cols="40" rows="3"  maxlength="300"></textarea>
+                        placeholder="Please enter a message." cols="40" rows="3" maxlength="300"></textarea>
                 </div>
-                <button type="submit" id="contact-submit-btn" class="button-primary form-control rounded-2 ms-1">Send</button>
+                <button type="submit" id="contact-submit-btn"
+                    class="button-primary form-control rounded-2 ms-1">Send</button>
             </form>
         </div>
     </div>

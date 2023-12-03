@@ -1,15 +1,34 @@
 window.onload = () => {
-    const saveBtn = document.getElementById("save-btn");
-    saveBtn.addEventListener("click", save);
+    const savePromptBtn = document.getElementById("save-prompt-btn")
+    const saveOptionsBtn = document.getElementById("save-options-btn");
+    const ttsEnabled = document.getElementById("tts-enabled");
+    const ttsModel = document.getElementById("tts-model");
+    savePromptBtn.addEventListener("click", savePrompt)
+    saveOptionsBtn.addEventListener("click", saveOptions);
+    ttsEnabled.addEventListener("click", updateTTSOptions);
+    ttsModel.addEventListener("input", updateTTSOptions);
 
     // Navbar
     const dashboardBtn = document.getElementById("dashboard-btn");
     const uninstallBtn = document.getElementById("uninstall-btn");
     dashboardBtn.addEventListener("click", location.reload);
     uninstallBtn.addEventListener("click", uninstall);
+    
+    function updateTTSOptions() {
+        if (ttsEnabled.checked)
+        {
+            document.getElementById("tts-model").disabled = false;
+            document.getElementById("tts-voice").disabled = false;
+        } else {
+            document.getElementById("tts-model").disabled = true;
+            document.getElementById("tts-voice").disabled = true;
+        }
 
-    loadOptions();
-
+        if (ttsModel.value == "tts-chrome")
+        {
+            document.getElementById("tts-voice").disabled = true;
+        }
+    }
 
     function loadOptions()
     {
@@ -28,7 +47,8 @@ window.onload = () => {
                 "WordLimit": "unset",
                 "TTS": "unset",
                 "GPT": "unset",
-                "Voice": "unset"
+                "Voice": "unset",
+                "TTSEnabled": "unset"
             },
             function updateOptionFields(botOptions) {
                 // Only set if values are found in storage, so placeholders take place.
@@ -60,37 +80,51 @@ window.onload = () => {
                 {
                     document.getElementById("tts-voice").value = botOptions.Voice;
                 }
+                if (botOptions.TTSEnabled != "unset")
+                {
+                    ttsEnabled.checked = botOptions.TTSEnabled;
+                    updateTTSOptions();
+                }
             }
         );
     }
 
-    // Saves extensions settings
-    function save() {
+    function saveOptions() {
         const key = document.getElementById("api-key");
+        const ttsVoice = document.getElementById("tts-voice");
+        const gptModel = document.getElementById("gpt-model");
+
+        chrome.storage.local.set({ OpenAIKey: key.value });
+
+        chrome.storage.sync.set({
+            TTS: ttsModel.value.toString().toLowerCase(),
+            GPT: gptModel.value.toString().toLowerCase(),
+            Voice: ttsVoice.value.toString().toLowerCase(),
+            TTSEnabled: ttsEnabled.checked
+        },
+        function () {
+            loadOptions();
+        });
+    }
+    
+    // Saves extensions settings
+    function savePrompt() {
         const readingLevel = document.getElementById("reading-level");
         const persona = document.getElementById("persona");
         const botAction = document.getElementById("action");
         const wordLimit = document.getElementById("word-limit");
-        const ttsModel = document.getElementById("tts-model");
-        const ttsVoice = document.getElementById("tts-voice");
-        const gptModel = document.getElementById("gpt-model");
-
+        
         if (Number.isNaN(wordLimit.value))
         {
             console.log('Word limit is not a number, please use a real number');
             return false;
         }
 
-        chrome.storage.local.set({ OpenAIKey: key.value });
-
         chrome.storage.sync.set({
             ReadingLevel: readingLevel.value.toString().toLowerCase(),
             BotAction: botAction.value.toString().toLowerCase(),
             Persona: persona.value.toString().toLowerCase(),
             WordLimit: wordLimit.value,
-            TTS: ttsModel.value.toString().toLowerCase(),
-            GPT: gptModel.value.toString().toLowerCase(),
-            Voice: ttsVoice.value.toString().toLowerCase()
         },
         function () {
             updatePrompt();
@@ -113,11 +147,12 @@ window.onload = () => {
                 "ReadingLevel": "beginner",
                 "WordLimit": "30",
             }, function (botOptions) {
-                prompt.textContent = `Act as a/an ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a/an ${botOptions.ReadingLevel} level of the topic. 
+                prompt.textContent = ` You are a/an ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a/an ${botOptions.ReadingLevel} level of the topic. 
                 Limit responses to ${botOptions.WordLimit} words.`;
             }
         );
     }
 
+    loadOptions();
     updatePrompt();
 };

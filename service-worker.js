@@ -172,7 +172,8 @@ async function textToSpeech(text) {
   return await chrome.storage.sync.get(
     {
       "TTS": "tts-1",
-      "Voice": "alloy"
+      "Voice": "alloy",
+      "TTSEnabled": true
     })
     .then((syncStorage) => {
       syncStorage.TTS = syncStorage.TTS.toString().toLowerCase();
@@ -180,13 +181,17 @@ async function textToSpeech(text) {
       return syncStorage;
     })
     .then(async (syncStorage) => {
+      if (!syncStorage.TTSEnabled) {
+        return;
+      }
+
       if (syncStorage.TTS == "tts-1" || syncStorage.TTS == "tts-1-hd") {
         return await chrome.storage.local.get(["OpenAIKey"]).then(async (storage) => {
           return await fetchRequestForOpenAITTS(text, syncStorage.TTS, syncStorage.Voice, storage.OpenAIKey)
             .then(async (blob) => {
               await setupOffscreenDocument('pages/audio-playback.html', ['AUDIO_PLAYBACK', 'BLOBS'], 'Playing Text-To-Speech').then(() => {
                 // Slight delay to allow page to subscribe to messages.
-                setTimeout(sendBlobToOffscreen.bind(null, blob), 500);
+                setTimeout(sendBlobToOffscreen.bind(null, blob), 100);
               });
             })
             .catch((err) => {
@@ -228,7 +233,7 @@ async function getGPTInstructions() {
       return botOptions;
     })
     .then((botOptions) => {
-      return `Act as a/an ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a/an ${botOptions.ReadingLevel} level of the topic. 
+      return `You are a/an ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a/an ${botOptions.ReadingLevel} level of the topic. 
               Limit responses to ${botOptions.WordLimit} words. In the event that you can not provide an answer, only apologize and ask for more context.`;
     })
     .catch((err) => {
@@ -321,16 +326,21 @@ async function getCompletionResults(text) {
       console.err("Could not retrive selected GPT model from storage -", err);
     });
   })
-    .catch((err) => {
+    .catch(async (err) => {
       console.error("Could not retrieve API Key from storage -", err)
+      await sendNotification("Simply Explain - Error", "basic", "Please set an API Key in the options menu - " + err)
     });
 }
 
 // Processes text through GPT then provides the result via TTS.
 async function processText(text) {
   await getCompletionResults(text).then(async (data) => {
-    if (!data.choices) {
+    if (!data)
+    {
       throw new Error("No completion result found.");
+    }
+    if (!data.choices) {
+      throw new Error("No completion choices found.");
     }
     await textToSpeech(data.choices[0].message.content);
     await sendNotification("Simply Explain", "basic", data.choices[0].message.content);
@@ -375,10 +385,12 @@ function sendBlobToOffscreen(blob) {
     chrome.runtime.sendMessage({
       text: base64String,
       target: 'offscreen',
-    }, () => {
+    }, (response) => {
       if (chrome.runtime.lastError) {
         console.error("Failed to send message to offscreen document -", chrome.runtime.lastError.message);
+        return;
       }
+      console.log(response);
     })
   };
 }
