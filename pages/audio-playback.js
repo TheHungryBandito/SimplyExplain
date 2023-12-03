@@ -19,4 +19,6 @@ function handleMessages(message, sender, sendResponse) {
     audioElement.setAttribute("src", URL.createObjectURL(audioBlob));
     audioElement.setAttribute("type", 'audio/mpeg');
     audioElement.play();
+
+    sendResponse("Message recieved");
 }
