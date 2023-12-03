@@ -41,25 +41,72 @@ hr {
     padding-top: 1rem;
     padding-bottom: 1rem;
     font-weight: 600;
-    box-shadow: none !important;
+    box-shadow: none;
     transition: filter 0.2s;
-}
-
-.button-primary:hover, .button-discrete:hover {
-    filter: brightness(0.85);
-}
-
-.button-primary:active, .button-discrete:active {
-    filter: brightness(0.75);
 }
 
 .button-discrete {
     background: none;
     color: white;
     border-style: none;
-    transition: filter 0.2s;
     text-decoration: none;
+    transition: 
+
+.button-primary:hover, .button-discrete:hover {
+    filter: brightness(0.85);
 }
+
+.button-primary:hover {
+    box-shadow: 0 0 5px var(--color-primary);
+}
+
+.button-discrete:hover {
+    color: var(--color-primary);
+}
+
+
+.button-primary:active, .button-discrete:active {
+    filter: brightness(0.75);
+}
+
+.button-primary:active {
+    box-shadow: 0 0 5px var(--color-primary);
+}
+
+.button-discrete:active {
+    color: var(--color-primary);
+}
+
+.checkbox-primary {
+    background-color: var(--color-surface) !important;
+    color: var(--color-secondary);
+    border-style: none;
+    padding: 4rem;
+    transition: 
+        filter 0.2s,
+        background-color 0.2s,
+        color 0.2s;
+}
+
+.checkbox-primary:hover {
+    filter: brightness(0.5);
+    background-color: var(--color-primary) !important;
+    color: var(--color-secondary);
+}
+
+.checkbox-primary:checked {
+    filter: brightness(1);
+    background-color: var(--color-primary) !important;
+    color: var(--color-secondary);
+}
+
+.checkbox-primary:not(:checked, :hover) {
+    filter: brightness(1);
+    background-color: var(--color-surface) !important;
+    color: var(--color-secondary);
+}
+
+
 
 .color-dark {
     color: var(--color-surface-dark);
@@ -92,12 +139,17 @@ hr {
     border-color: var(--color-surface);
 }
 
-.form-dark:focus {
+.form-dark:focus, .form-dark:hover {
     background-color: var(--color-surface);
     color: white;
     border-color: var(--color-primary);
     outline-color: var(--color-primary);
     box-shadow: 0 0 5px var(--color-primary);
+}
+
+.form-dark:disabled {
+    background-color: var(--color-surface-dark);
+    color: var(--color-surface-light);
 }
 
 .form-dark::placeholder {
