@@ -51,6 +51,9 @@ hr {
     border-style: none;
     text-decoration: none;
     transition: 
+        filter 0.2s,
+        color 0.2s;
+}
 
 .button-primary:hover, .button-discrete:hover {
     filter: brightness(0.85);
