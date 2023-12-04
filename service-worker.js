@@ -11,6 +11,15 @@ function setupExtension() {
 
   // Right-click menu behaviour
   chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (tab.url.includes('chrome://')) {
+      sendNotification({
+        title: "Simply Explain - Error",
+        type: "basic",
+        message: "Unable to use extension on 'chrome://' URLs.",
+        requireInteraction: false,
+      });
+      return;
+    }
     authFlow(processText.bind(null, info.selectionText));
   });
 
@@ -34,6 +43,14 @@ function setupExtension() {
       chrome.scripting.executeScript({
         target: { tabId: id },
         func: relaySelectedText
+      })
+      .catch((err) => {
+        sendNotification({
+          title: "Simply Explain - Error",
+          type: "basic",
+          message: err.message,
+          requireInteraction: false,
+        });
       });
     });
   });
