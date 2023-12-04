@@ -44,7 +44,6 @@ function setupExtension() {
   });
 }
 
-// Gets the user's current active tab.
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
@@ -328,22 +327,32 @@ async function getCompletionResults(text) {
   })
     .catch(async (err) => {
       console.error("Could not retrieve API Key from storage -", err)
-      await sendNotification("Simply Explain - Error", "basic", "Please set an API Key in the options menu - " + err)
+      await sendNotification({
+        title: "Simply Explain - Error", 
+        type: "basic", 
+        message: "Please set an API Key in the options menu - " + err, 
+        requireInteraction: false,
+      });
     });
 }
 
 // Processes text through GPT then provides the result via TTS.
 async function processText(text) {
   await getCompletionResults(text).then(async (data) => {
-    if (!data)
-    {
+    if (!data) {
       throw new Error("No completion result found.");
     }
     if (!data.choices) {
       throw new Error("No completion choices found.");
     }
+    await sendNotification({
+      title: "Simply Explain (Hover for full message)", 
+      type: "basic", 
+      message: data.choices[0].message.content, 
+      requireInteraction: true,
+      buttons: [{ title: "Close" }]
+    });
     await textToSpeech(data.choices[0].message.content);
-    await sendNotification("Simply Explain", "basic", data.choices[0].message.content);
   })
     .catch((err) => {
       console.error("Could not process text -", err);
