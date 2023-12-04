@@ -133,6 +133,9 @@ window.onload = () => {
     function uninstall() {
         chrome.management.uninstallSelf({
             showConfirmDialog: true
+        })
+        .catch((err) => {
+            console.error("Uninstall failed -", err);
         });
     }
 
