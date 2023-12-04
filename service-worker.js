@@ -350,17 +350,18 @@ async function processText(text) {
     });
 }
 
-async function sendNotification(title, type, message) {
-  chrome.notifications.create({
+async function sendNotification(options) {
+  return chrome.notifications.create({
     iconUrl: chrome.runtime.getURL("images/person-raised-hand128.png"),
-    title: title,
-    type: type,
-    message: message
-  }), () => {
-    if (chrome.runtime.lastError) {
-      console.error("Failed to send notifcation -", chrome.runtime.lastError.message);
-    }
-  };
+    title: options.title,
+    type: options.type,
+    message: options.message,
+    requireInteraction: options.requireInteraction,
+    buttons: options.buttons
+  })
+    .catch((err) => {
+      console.error("Failed to send notifcation -", err);
+    });
 }
 
 // Opens the admin panel as a new tab to the current window.
