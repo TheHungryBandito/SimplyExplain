@@ -21,8 +21,7 @@
                 <ul class="list-unstyled">
                     <li>
                         <img src="../images/motherboard.svg" alt="motherboard-icon">
-                        <a id="dashboard-btn" href="#dashboard"
-                            class="d-inline-block button-discrete mb-2 p-0">Dashboard</a>
+                        <a id="dashboard-btn" href="#dashboard" class="d-inline-block button-discrete mb-2 p-0">Dashboard</a>
                     </li>
                     <li>
                         <img src="../images/gear.svg" alt="gear-icon">
@@ -43,7 +42,6 @@
             <p id="dashboard" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Dashboard</p>
             <div class="row">
                 <h1 class="mb-3 text-start col-10">Simply Explain</h1>
-
             </div>
             <hr>
             <!-- Prompt builder -->
@@ -73,7 +71,7 @@
                     <label for="word-limit" class="col-3 text-start text-color-primary fw-semibold fs-5">Word
                         Limit</label>
                     <input type="number" id="word-limit" class="col form-control form-dark" placeholder="30">
-                    <div class="col-2">
+                    <div class="col-2 me-5">
                         <button id="save-prompt-btn" class="button-primary rounded-5">Save</button>
                     </div>
                 </div>
@@ -106,7 +104,7 @@
                     <label for="tts-enabled" class="col-3 text-start text-color-primary fw-semibold fs-5">
                         Voice Enabled
                     </label>
-                    <input id="tts-enabled" class="form-check-input form-dark p-4 checkbox-primary" type="checkbox" value="enabled" checked></input>
+                    <input id="tts-enabled" class="form-check-input form-dark p-4 checkbox-primary" type="checkbox" value="enabled" checked>
                 </div>
                 <div class="row mb-3 mt-4 align-items-center">
                     <label for="tts-model" class="col-3 text-start text-color-primary fw-semibold fs-5">
@@ -130,7 +128,7 @@
                         <option value="nova">Nova</option>
                         <option value="shimmer">Shimmer</option>
                     </select>
-                    <div class="col-2">
+                    <div class="col-2 me-5">
                         <button id="save-options-btn" class="button-primary rounded-5">Save</button>
                     </div>
                 </div>
@@ -195,7 +193,7 @@
                     <label for="contact-content" class="col-3 text-start text-color-primary fw-semibold fs-5">
                         Content
                     </label>
-                    <textarea type="text" id="contact-content" class="col form-control form-dark"
+                    <textarea id="contact-content" class="col form-control form-dark"
                         placeholder="Please enter a message." cols="40" rows="3" maxlength="300"></textarea>
                 </div>
                 <button type="submit" id="contact-submit-btn"

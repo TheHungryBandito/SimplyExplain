@@ -9,9 +9,7 @@ window.onload = () => {
     ttsModel.addEventListener("input", updateTTSOptions);
 
     // Navbar
-    const dashboardBtn = document.getElementById("dashboard-btn");
     const uninstallBtn = document.getElementById("uninstall-btn");
-    dashboardBtn.addEventListener("click", location.reload);
     uninstallBtn.addEventListener("click", uninstall);
     
     function updateTTSOptions() {
