@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Simply Explain",
-    "description": "Explain, re-word, and simplify selected text via Text-To-Speech (TTS). Assistive Technology.",
+    "description": "Explain, re-word, and simplify selected text. GPT powered Assistive Technology.",
     "version": "1.0",
     "action": {
         "default_title": "Simply Explain",
