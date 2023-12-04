@@ -12,7 +12,6 @@
 
 <body class="container pb-4 mt-5">
     <div class="row">
-
         <!-- Navbar -->
         <div class="col-3 nav-drawer background-secondary rounded-4 me-2">
             <div class="m-2 m-sm-1">
@@ -24,12 +23,12 @@
                         <a id="dashboard-btn" href="#dashboard" class="d-inline-block button-discrete mb-2 p-0">Dashboard</a>
                     </li>
                     <li>
-                        <img src="../images/gear.svg" alt="gear-icon">
-                        <a id="options-btn" href="#options" class="d-inline-block button-discrete mb-2 p-0">Options</a>
+                        <img src="../images/patch-question.svg" alt="gear-icon">
+                        <a id="prompt-builder-btn" href="#prompt-builder" class="d-inline-block button-discrete mb-2 p-0">Prompt Builder</a>
                     </li>
                     <li>
-                        <img src="../images/telephone.svg" alt="telephone-icon">
-                        <a id="contact-btn" href="#contact" class="d-inline-block button-discrete mb-2 p-0">Contact</a>
+                        <img src="../images/gear.svg" alt="gear-icon">
+                        <a id="options-btn" href="#options" class="d-inline-block button-discrete mb-2 p-0">Options</a>
                     </li>
                     <li>
                         <img src="../images/trash.svg" alt="trash-icon">
@@ -46,7 +45,8 @@
             <hr>
             <!-- Prompt builder -->
             <form>
-                <div class="row mb-3 align-items-center">
+                <p id="prompt-builder" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Prompt Builder</p>
+                <div class="row mb-3 mt-4 align-items-center">
                     <label for="reading-level" class="col-3 text-start text-color-primary fw-semibold fs-5">Reading
                         Level</label>
                     <select id="reading-level" class="col form-select form-dark">
@@ -137,7 +137,7 @@
 
             <!-- Info -->
             <article id="info" class="row">
-                <div class="col background-secondary-alternate rounded-5 p-4 me-lg-3 ms-lg-2 mb-md-0 mb-3 ms-2">
+                <div class="row background-secondary-alternate rounded-5 p-4 mb-3 ms-2">
                     <h2>What is Simply Explain?</h2>
                     <p class="text-color-dark mb-1">
                         Simply Explain is a chrome extension that leverages Open AI's GPT models to assist users
@@ -150,7 +150,7 @@
                         have "hallucinations", there is always a chance the response may be incorrect or nonsensical.
                     </p>
                 </div>
-                <div class="col background-secondary-alternate rounded-5 p-4 ms-lg-0 ms-2">
+                <div class="row background-secondary-alternate rounded-5 p-4 ms-2">
                     <h2>Controls</h2>
                     <p class="text-color-dark mb-1">
                         1 - Select Text
@@ -171,35 +171,6 @@
                 </div>
             </article>
             <hr>
-
-            <!-- Contact -->
-            <form>
-                <p id="contact" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase">> Contact</p>
-                <div class="row mb-3 mt-4 align-items-center">
-                    <label for="contact-email" class="col-3 text-start text-color-primary fw-semibold fs-5">
-                        Email
-                    </label>
-                    <input type="text" id="contact-email" class="col form-control form-dark"
-                        placeholder="Please enter your email." maxlength="100">
-                </div>
-                <div class="row mb-3 mt-4 align-items-center">
-                    <label for="contact-summary" class="col-3 text-start text-color-primary fw-semibold fs-5">
-                        Summary
-                    </label>
-                    <input type="text" id="contact-summary" class="col form-control form-dark"
-                        placeholder="Please enter a title." maxlength="50">
-                </div>
-                <div class="row mb-3 mt-4 align-items-center">
-                    <label for="contact-content" class="col-3 text-start text-color-primary fw-semibold fs-5">
-                        Content
-                    </label>
-                    <textarea id="contact-content" class="col form-control form-dark"
-                        placeholder="Please enter a message." cols="40" rows="3" maxlength="300"></textarea>
-                </div>
-                <button type="submit" id="contact-submit-btn"
-                    class="button-primary form-control rounded-2 ms-1">Send</button>
-            </form>
-        </div>
     </div>
     <div class="row spacer"></div>
     <footer>
