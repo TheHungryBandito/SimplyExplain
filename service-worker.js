@@ -29,22 +29,7 @@ function setupExtension() {
   chrome.runtime.onMessage.addListener(handleMessages);
 
   // On Keyboard shortcut, process selected text.
-  chrome.commands.onCommand.addListener((command) => {
-    getCurrentTabId().then((id) => {
-      chrome.scripting.executeScript({
-        target: { tabId: id },
-        func: relaySelectedText
-      })
-      .catch((err) => {
-        sendNotification({
-          title: "Simply Explain - Error",
-          type: "basic",
-          message: err.message,
-          requireInteraction: false,
-        });
-      });
-    });
-  });
+  chrome.commands.onCommand.addListener(handleCommands);
 
   // When extension icon clicked, open the admin panel.
   chrome.action.onClicked.addListener(function () {
