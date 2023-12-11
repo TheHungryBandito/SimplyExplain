@@ -566,13 +566,10 @@ function sendBlobToOffscreen(blob) {
     chrome.runtime.sendMessage({
       text: base64String,
       target: 'offscreen',
-    }, (response) => {
-      if (chrome.runtime.lastError) {
-        console.error("Failed to send message to offscreen document -", chrome.runtime.lastError.message);
-        return;
-      }
-      console.log(response);
     })
+        .catch((err) => {
+          console.error('Failed to send message to offscreen document -', err);
+        });
   };
 }
 
