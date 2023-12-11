@@ -32,8 +32,8 @@ function setupExtension() {
   chrome.commands.onCommand.addListener(handleCommands);
 
   // When extension icon clicked, open the admin panel.
-  chrome.action.onClicked.addListener(function () {
-    authFlow(openAdminPanel);
+  chrome.action.onClicked.addListener(async () => {
+    await authRequired(openAdminPanel);
   });
 }
 
