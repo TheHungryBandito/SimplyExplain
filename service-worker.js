@@ -218,17 +218,17 @@ async function auth() {
 async function authRequired(callback) {
   const userLoggedIn = await isLoggedIn();
   if (!userLoggedIn) {
-    auth().then(
-      function success(result) {
-        console.log("Authentication success.");
-        callback();
-      },
-      function failure(result) {
-        console.log("Authentication failure.");
-      })
-      .catch((err) => {
-        console.error('Failure to authenticate:', err);
-      });
+    await auth().then(
+        function success(result) {
+          console.log('Authentication success.');
+          callback();
+        },
+        function failure(result) {
+          console.log('Authentication failure.');
+        })
+        .catch((err) => {
+          console.error('Failure to authenticate:', err);
+        });
     return;
   }
 
