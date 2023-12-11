@@ -105,7 +105,10 @@ async function getCurrentTabId() {
   return tab.id;
 }
 
-// Relay the text the user is selecting to the service worker
+/**
+ * Sends the user's selected text through message channel as 'selectionText'.
+ * @return {Promise} A promise containing selected text.
+ */
 async function relaySelectedText() {
   return await chrome.runtime.sendMessage({
     type: "selectionText",
