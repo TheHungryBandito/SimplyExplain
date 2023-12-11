@@ -643,6 +643,20 @@ async function loadHistory() {
   }
 }
 
+/**
+ * Saves the chat history to storage.
+ * @param {*} history Chat history to save.
+ */
+async function saveHistory(history) {
+  try {
+    await chrome.storage.local.set({
+      'History': history,
+    });
+  } catch (err) {
+    console.error('Could not save chat history -', err);
+  }
+}
+
 }
 
 setupExtension();
