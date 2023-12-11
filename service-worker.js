@@ -452,42 +452,47 @@ async function getCompletionResults(text) {
     return false;
   }
 
-  return await chrome.storage.local.get({ "OpenAIKey": false }).then(async (storage) => {
-    if (!storage.OpenAIKey) {
-      throw new Error("No api key found.");
-    }
-    return await chrome.storage.sync.get({ "GPT": "gpt-3.5-turbo-1106" }).then(async (syncStorage) => {
-      return await fetchCompletionRequestToGPT(instructions, syncStorage.GPT, text, storage.OpenAIKey);
-    }).catch((err) => {
-      console.err("Could not retrive selected GPT model from storage -", err);
+  const key = await getOpenAIKey();
+  if (!key) {
+    console.error('Could not retrieve API Key from storage -', err);
+    await pushNotification({
+      title: 'Simply Explain - Error',
+      type: 'basic',
+      message: 'Please set an API Key in the options menu - ' + err,
+      requireInteraction: false,
     });
-  })
-    .catch(async (err) => {
-      console.error("Could not retrieve API Key from storage -", err)
-      await sendNotification({
-        title: "Simply Explain - Error", 
-        type: "basic", 
-        message: "Please set an API Key in the options menu - " + err, 
-        requireInteraction: false,
-      });
-    });
-}
+  }
 
 // Processes text through GPT then provides the result via TTS.
 async function processText(text) {
   await getCompletionResults(text).then(async (data) => {
+  const syncStorage = await chrome.storage.sync.get(
+      {
+        'GPT': 'gpt-3.5-turbo-1106',
+      },
+  );
+
+  return await fetchCompletionRequestToGPT(
+      instructions,
+      syncStorage.GPT,
+      text,
+      key,
+  ).then((data) => {
     if (!data) {
-      throw new Error("No completion result found.");
+      throw new Error('No completion result found.');
     }
     if (!data.choices) {
-      throw new Error("No completion choices found.");
+      throw new Error('No completion choices found.');
     }
-    await sendNotification({
-      title: "Simply Explain (Hover for full message)", 
-      type: "basic", 
-      message: data.choices[0].message.content, 
-      requireInteraction: true,
-      buttons: [{ title: "Close" }]
+    return data;
+  }).catch((err) => {
+    console.error(
+        'Could not get completion results -',
+        err,
+    );
+  });
+}
+
     });
     await textToSpeech(data.choices[0].message.content);
   })
