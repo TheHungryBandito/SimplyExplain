@@ -551,7 +551,10 @@ async function openAdminPanel() {
   });
 }
 
-// Converts blob to json.stringify()-able format then sends it to offscreen.
+/**
+ * Converts blob to json.stringify()-able format then sends it to offscreen.
+ * @param {Blob} blob blob to send.
+ */
 function sendBlobToOffscreen(blob) {
   var reader = new FileReader();
   reader.readAsDataURL(blob);
