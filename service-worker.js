@@ -167,7 +167,11 @@ async function hasOffscreenDocument(url) {
   }
 }
 
-// Authenticate user with google.
+/**
+ * Authenticates with OAuth web flow.
+ * @return {Promise<string>} A promise containing the id token of
+ * the authenticated user.
+ */
 async function auth() {
   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
   const clientID = '849293445118-toonlns3d7fmocfcn4g8qvoc49neqmhn.apps.googleusercontent.com';
