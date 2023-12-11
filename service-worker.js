@@ -414,7 +414,14 @@ async function fetchCompletionRequestToGPT(instructions, model, text, apiKey) {
       });
 }
 
-// Sends API request to TTS model, returns mp3/mpeg blob.
+/**
+ * Sends a fetch request to OpenAI Text-To-Speech to process input text.
+ * @param {string} text The text to be spoken.
+ * @param {string} model The Text-To-Speech Model.
+ * @param {string} voice The desired output voice.
+ * @param {string} apiKey Open AI Api Key.
+ * @return {Promise} A Promise containing a .mp3 blob.
+ */
 async function fetchRequestForOpenAITTS(text, model, voice, apiKey) {
   return await fetch(
     new URL("https://api.openai.com/v1/audio/speech"), {
