@@ -1,5 +1,12 @@
 chrome.runtime.onMessage.addListener(handleMessages);
 
+/**
+ * Handles incoming messages from chrome.runtime.
+ * @param {*} message Received message.
+ * @param {chrome.runtime.MessageSender} sender Message sender.
+ * @param {Function} sendResponse Callback to send a response.
+ * @return {void}
+ */
 function handleMessages(message, sender, sendResponse) {
     if (message.target != 'offscreen') {
         console.log("Failed");
