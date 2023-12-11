@@ -27,7 +27,7 @@
         "notifications"
     ],
     "commands": {
-        "simply-explain": {
+        "explain": {
             "suggested_key": {
                 "default": "Ctrl+Shift+E",
                 "mac": "Command+Shift+E"
