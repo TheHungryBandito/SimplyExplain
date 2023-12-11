@@ -254,7 +254,11 @@ async function isLoggedIn() {
       });
 }
 
-// Processes text through selected text-to-speech.
+/**
+ * Processes text the user's selected Text-To-Speech model.
+ * @param {string} text The text to be spoken.
+ * @return {Promise}
+ */
 async function handleTextToSpeech(text) {
   return await chrome.storage.sync.get(
     {
