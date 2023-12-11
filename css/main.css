@@ -131,6 +131,18 @@ hr {
     border-color: var(--color-primary);
 }
 
+.border-end-dark {
+    border-right: 20px;
+    border-color: var(--color-surface-dark);
+    border: solid;
+}
+
+.border-start-dark {
+    border-left: 20px;
+    border-color: var(--color-surface-dark);
+    border: solid;
+}
+
 .nav-drawer {
     max-width: 200px;
     min-width: 115px;
