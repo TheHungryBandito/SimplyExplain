@@ -74,6 +74,27 @@ async function handleMessages(message, sender, sendResponse) {
   }
 }
 
+/**
+ * Runs injected script on current tab.
+ * @param {func} func The function to inject.
+ */
+async function injectFunctionIntoCurrentTab(func) {
+  getCurrentTabId().then((id) => {
+    chrome.scripting.executeScript({
+      target: {tabId: id},
+      func: func,
+    })
+        .catch((err) => {
+          pushNotification({
+            title: 'Simply Explain - Error',
+            type: 'basic',
+            message: err.message,
+            requireInteraction: false,
+          });
+        });
+  });
+}
+
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
