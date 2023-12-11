@@ -26,18 +26,7 @@ function setupExtension() {
   });
 
   // Recieve the selected text.
-  chrome.runtime.onMessage.addListener(
-    function (message, sender, sendResponse) {
-      if (!message.type !== "selectionText") {
-        return;
-      }
-      if (!message.text) {
-        return;
-      }
-
-      authFlow(processText.bind(null, message.text));
-    }
-  );
+  chrome.runtime.onMessage.addListener(handleMessages);
 
   // On Keyboard shortcut, process selected text.
   chrome.commands.onCommand.addListener((command) => {
