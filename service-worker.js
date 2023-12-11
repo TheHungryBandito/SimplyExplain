@@ -3,11 +3,11 @@
  */
 function setupExtension() {
   // Right-click context menu replaces itself with new selection.
-  chrome.contextMenus.removeAll(function () {
+  chrome.contextMenus.removeAll(function() {
     chrome.contextMenus.create({
-      id: "explain-btn",
-      title: "Explain: '%s'",
-      contexts: ["selection"]
+      id: 'explain-btn',
+      title: 'Explain: \'%s\'',
+      contexts: ['selection'],
     });
   });
 
