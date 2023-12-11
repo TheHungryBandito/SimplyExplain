@@ -126,21 +126,23 @@ async function relaySelectedText() {
  * @return {Promise}
  */
 async function setupOffscreenDocument(url, reasons, justification) {
-  if (await hasOffscreenDocument(url)) {
-    console.log("Offscreen already exists");
-    return true;
-  } else {
-    return chrome.offscreen.createDocument({
+  return await new Promise(async (resolve, reject) => {
+    const hasOffscreen = await hasOffscreenDocument(url);
+    if (hasOffscreen) {
+      return resolve(true);
+    }
+
+    await chrome.offscreen.createDocument({
       url: url,
       reasons: reasons,
       justification: justification,
-    },
-      function () {
-        if (chrome.runtime.lastError) {
-          console.error(`Failed to create offscreen document URL: "${url}" JUSTIFICATION: "${justification}" -`, chrome.runtime.lastError.message);
-        }
-      });
-  }
+    }).catch((err) => {
+      console.error(`Failed to create offscreen document URL: "${url}" 
+      JUSTIFICATION: "${justification}" -`, err);
+      return reject(err);
+    });
+    return resolve(true);
+  });
 }
 
 // Checks if there is an active offscreen.
