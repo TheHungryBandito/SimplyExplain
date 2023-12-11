@@ -261,45 +261,28 @@ async function isLoggedIn() {
  */
 async function handleTextToSpeech(text) {
   return await chrome.storage.sync.get(
-    {
-      "TTS": "tts-1",
-      "Voice": "alloy",
-      "TTSEnabled": true
-    })
-    .then((syncStorage) => {
-      syncStorage.TTS = syncStorage.TTS.toString().toLowerCase();
-      syncStorage.Voice = syncStorage.Voice.toString().toLowerCase();
-      return syncStorage;
-    })
-    .then(async (syncStorage) => {
-      if (!syncStorage.TTSEnabled) {
-        return;
-      }
+      {
+        'TTS': 'tts-1',
+        'Voice': 'alloy',
+        'TTSEnabled': true,
+      })
+      .then((syncStorage) => {
+        syncStorage.TTS = syncStorage.TTS.toString().toLowerCase();
+        syncStorage.Voice = syncStorage.Voice.toString().toLowerCase();
+        return syncStorage;
+      })
+      .then(async (syncStorage) => {
+        if (!syncStorage.TTSEnabled) {
+          return;
+        }
+        if (syncStorage.TTS == 'tts-1' || syncStorage.TTS == 'tts-1-hd') {
+          openAITextToSpeech(text, syncStorage.TTS, syncStorage.Voice);
+        } else if (syncStorage.TTS == 'tts-chrome') {
+          chromeTextToSpeech(text);
+        }
+      });
+}
 
-      if (syncStorage.TTS == "tts-1" || syncStorage.TTS == "tts-1-hd") {
-        return await chrome.storage.local.get(["OpenAIKey"]).then(async (storage) => {
-          return await fetchRequestForOpenAITTS(text, syncStorage.TTS, syncStorage.Voice, storage.OpenAIKey)
-            .then(async (blob) => {
-              await setupOffscreenDocument('pages/audio-playback.html', ['AUDIO_PLAYBACK', 'BLOBS'], 'Playing Text-To-Speech').then(() => {
-                // Slight delay to allow page to subscribe to messages.
-                setTimeout(sendBlobToOffscreen.bind(null, blob), 100);
-              });
-            })
-            .catch((err) => {
-              console.error('Failed to get OpenAI Text-To-Speech -', err);
-              return false;
-            })
-        });
-      }
-      else if (syncStorage.TTS == "tts-chrome") {
-        chrome.tts.stop();
-        return chrome.tts.speak(
-          text,
-          { 'lang': 'en-US' },
-          function () {
-            if (chrome.runtime.lastError) {
-              console.error('Chrome TTS failed to speak -', chrome.runtime.lastError.message);
-            }
           }
         );
       }
