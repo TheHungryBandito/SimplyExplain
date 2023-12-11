@@ -546,8 +546,8 @@ async function openAdminPanel() {
   const currentTab = await chrome.tabs.query({active: true});
   chrome.tabs.create({
     active: true,
-    url: chrome.runtime.getURL("../pages/admin-panel.html"),
-    windowId: currentTab[0].windowId
+    url: chrome.runtime.getURL('../pages/admin-panel.html'),
+    windowId: currentTab[0].windowId,
   });
 }
 
