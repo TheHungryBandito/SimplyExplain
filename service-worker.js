@@ -255,7 +255,7 @@ async function isLoggedIn() {
 }
 
 // Processes text through selected text-to-speech.
-async function textToSpeech(text) {
+async function handleTextToSpeech(text) {
   return await chrome.storage.sync.get(
     {
       "TTS": "tts-1",
