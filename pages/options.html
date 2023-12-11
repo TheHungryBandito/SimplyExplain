@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simply Explain</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <script src="admin-panel.js"></script>
+</head>
+
+<body class="container pb-4 mt-5">
+    <div class="row">
+        <div class="col">
+            <p id="dashboard" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase text-center">Dashboard</p>
+            <div class="row">
+                <h1 class="mb-3 text-start col text-center">Simply Explain</h1>
+            </div>
+            <hr>
+            <!-- Prompt builder -->
+            <form>
+                <p id="prompt-builder" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase text-center">Prompt Builder</p>
+                <div class="row ms-3 mb-3 mt-4 align-items-center">
+                    <label for="reading-level" class="row text-start text-color-primary fw-semibold fs-5">Reading
+                        Level</label>
+                    <select id="reading-level" class="row form-select form-dark">
+                        <option value="beginner" selected>Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="row ms-3 mb-3 align-items-center">
+                    <label for="action" class="row text-start text-color-primary fw-semibold fs-5">Action</label>
+                    <select id="action" class="row form-select form-dark">
+                        <option value="explain the concept of the text" selected>Explain Concept</option>
+                        <option value="re-word the text">Re-word Text</option>
+                        <option value="simplify the text">Simplify Text</option>
+                    </select>
+                </div>
+                <div class="row ms-3 mb-3 align-items-center">
+                    <label for="persona" class="row text-start text-color-primary fw-semibold fs-5">Persona</label>
+                    <input type="text" id="persona" class="row form-control form-dark" placeholder="Language Teacher">
+                </div>
+                <div class="row ms-3 mb-3 align-items-center">
+                    <label for="word-limit" class="row text-start text-color-primary fw-semibold fs-5">Word
+                        Limit</label>
+                    <input type="number" id="word-limit" class="row form-control form-dark" placeholder="30">
+                    <div class="row me-5 mt-3">
+                        <button id="save-prompt-btn" type="button" class="button-primary rounded-5">Save</button>
+                    </div>
+                </div>
+            </form>
+            <hr>
+            <div class="row">
+                <div class="col background-secondary-alternate rounded-5 p-4 ms-3 mb-1">
+                    <h2>Result</h2>
+                    <p id="prompt" class="text-color-dark mb-0">Prompt</p>
+                </div>
+            </div>
+            <hr>
+            <!-- Options -->
+            <form>
+                <p id="options" class="mt-2 mb-0 text-color-primary fw-semibold text-uppercase text-center">Options</p>
+                <div class="row ms-3 mb-3 mt-4 align-items-center">
+                    <label for="api-key" class="row text-start text-color-primary fw-semibold fs-5">API Key</label>
+                    <input type="password" id="api-key" class="row form-control form-dark" placeholder="Enter API Key">
+                </div>
+                <div class="row ms-3 mb-3 mt-4 align-items-center">
+                    <label for="gpt-model" class="row text-start text-color-primary fw-semibold fs-5">
+                        GPT Version
+                    </label>
+                    <select id="gpt-model" class="row form-select form-dark">
+                        <option value="gpt-4" selected>GPT-4</option>
+                        <option value="gpt-3.5-turbo-1106">GPT-3.5 Turbo</option>
+                    </select>
+                </div>
+                <div class="row ms-1 mb-3 mt-4 align-items-center">
+                    <label for="tts-enabled" class="col-3 text-start text-color-primary fw-semibold fs-5">
+                        Voice Enabled
+                    </label>
+                    <input id="tts-enabled" class="ms-4 form-check-input form-dark p-4 checkbox-primary" type="checkbox" value="enabled" checked>
+                </div>
+                <div class="row ms-3 mb-3 mt-4 align-items-center">
+                    <label for="tts-model" class="row text-start text-color-primary fw-semibold fs-5">
+                        Voice Model
+                    </label>
+                    <select id="tts-model" class="row form-select form-dark">
+                        <option value="tts-chrome" selected>TTS Chrome</option>
+                        <option value="tts-1">TTS 1 (Open AI)</option>
+                        <option value="tts-1-hd">TTS 1 HD (Open AI)</option>
+                    </select>
+                </div>
+                <div class="row ms-3 mb-3 mt-4 align-items-center">
+                    <label for="tts-voice" class="row text-start text-color-primary fw-semibold fs-5">
+                        Voice
+                    </label>
+                    <select id="tts-voice" class="row form-select form-dark">
+                        <option value="alloy" selected>Alloy</option>
+                        <option value="echo">Echo</option>
+                        <option value="fable">Fable</option>
+                        <option value="onyx">Onyx</option>
+                        <option value="nova">Nova</option>
+                        <option value="shimmer">Shimmer</option>
+                    </select>
+                    <div class="row me-5 mt-3">
+                        <button id="uninstall-btn" type="button" class="col button-primary rounded-start-5 border-end-dark">Uninstall</button>
+                        <button id="save-options-btn" type="button" class="col button-primary rounded-end-5 border-start-dark">Save</button>
+                    </div>
+                </div>
+            </form>
+            <hr>
+    </div>
+    <div class="row spacer"></div>
+    <footer>
+        <div class="row">
+            <div class="col">
+                <p class="text-center text-color-primary">Simply Explain</p>
+            </div>
+            <div class="col">
+                <p class="text-center text-color-primary">Created by Joshua Crews</p>
+            </div>
+            <div class="col">
+                <p class="text-center text-color-primary">2023</p>
+            </div>
+        </div>
+    </footer>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
