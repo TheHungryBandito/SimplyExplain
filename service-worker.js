@@ -145,7 +145,13 @@ async function setupOffscreenDocument(url, reasons, justification) {
   });
 }
 
-// Checks if there is an active offscreen.
+/**
+ * For >= chrome 116 - Checks contexts for existing offscreen.
+ * For < chrome 116 - Matches all clients to check if there
+ * is an existing offscreen.
+ * @param {string} url The (relative) url of the offscreen document.
+ * @return {boolean} Returns true if offscreen found.
+ */
 async function hasOffscreenDocument(url) {
   if ('getContexts' in chrome.runtime) {
     const contexts = await chrome.runtime.getContexts({
