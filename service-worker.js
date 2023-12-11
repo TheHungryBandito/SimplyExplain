@@ -515,6 +515,16 @@ async function processText(text) {
       });
 }
 
+/**
+ * Pushes a new chrome notification to the user.
+ * @param {object} options
+ * title: Title of the notification,
+ * type: Chrome.notifications notification type,
+ * message: Content of the notification,
+ * requireInteraction: Require user interaction before dismissing notification,
+ * buttons: Buttons for user interaction (max 2).
+ * @return {Promise<string>} A promise containing the notificationId.
+ */
 async function pushNotification(options) {
   return chrome.notifications.create({
     iconUrl: chrome.runtime.getURL("images/person-raised-hand128.png"),
