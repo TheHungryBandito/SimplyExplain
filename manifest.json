@@ -10,7 +10,8 @@
     },
     "action": {
         "default_title": "Simply Explain",
-        "default_icon": "./images/person-raised-hand16.png"
+        "default_icon": "./images/person-raised-hand16.png",
+        "default_popup": "./pages/chat-history.html"
     },
     "icons": {
         "16": "./images/person-raised-hand16.png",
