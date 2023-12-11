@@ -332,28 +332,33 @@ async function chromeTextToSpeech(text) {
  */
 async function getGPTInstructions() {
   return await chrome.storage.sync.get({
-    "Persona": "mentor",
-    "BotAction": "explain the concept of the text",
-    "ReadingLevel": "beginner",
-    "WordLimit": "30",
+    'Persona': 'mentor',
+    'BotAction': 'explain the concept of the text',
+    'ReadingLevel': 'beginner',
+    'WordLimit': '30',
   })
-    .then((botOptions) => {
-      if (Number.isNaN(botOptions.WordLimit)) {
-        throw new Error("Saved word limit is not a number");
-      }
-      botOptions.Persona = botOptions.Persona.toString().toLowerCase();
-      botOptions.BotAction = botOptions.BotAction.toString().toLowerCase();
-      botOptions.ReadingLevel = botOptions.ReadingLevel.toString().toLowerCase();
-      return botOptions;
-    })
-    .then((botOptions) => {
-      return `You are a/an ${botOptions.Persona} and ${botOptions.BotAction} the user provides at a/an ${botOptions.ReadingLevel} level of the topic. 
-              Limit responses to ${botOptions.WordLimit} words. In the event that you can not provide an answer, only apologize and ask for more context.`;
-    })
-    .catch((err) => {
-      console.error('Could not create GPT Instructions', err);
-      return false;
-    });
+      .then((botOptions) => {
+        if (Number.isNaN(botOptions.WordLimit)) {
+          throw new Error('Saved word limit is not a number');
+        }
+        botOptions.Persona = botOptions.Persona
+            .toString().toLowerCase();
+        botOptions.BotAction = botOptions.BotAction
+            .toString().toLowerCase();
+        botOptions.ReadingLevel = botOptions.ReadingLevel
+            .toString().toLowerCase();
+        return botOptions;
+      })
+      .then((botOptions) => {
+        return `You are a/an ${botOptions.Persona} and ${botOptions.BotAction}
+        the user provides at a/an ${botOptions.ReadingLevel} level of the
+        topic. Limit responses to ${botOptions.WordLimit} words.
+        In the event that you can not provide an answer,
+        only apologize and ask for more context.`;
+      })
+      .catch((err) => {
+        console.error('Could not create GPT Instructions', err);
+      });
 }
 
 // Sends API request to GPT model, returns text completion.
