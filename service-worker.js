@@ -424,24 +424,25 @@ async function fetchCompletionRequestToGPT(instructions, model, text, apiKey) {
  */
 async function fetchRequestForOpenAITTS(text, model, voice, apiKey) {
   return await fetch(
-    new URL("https://api.openai.com/v1/audio/speech"), {
-    method: 'POST',
-    headers: {
-      'Authorization': "Bearer " + apiKey,
-      'Content-Type': "application/json"
-    },
-    body: JSON.stringify({
-      "model": model,
-      "input": text,
-      "voice": voice
-    })
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Fetch Failed: ${response.statusText} Status: ${response.status}`);
-      }
-      return response.blob();
-    })
+      new URL('https://api.openai.com/v1/audio/speech'), {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + apiKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          'model': model,
+          'input': text,
+          'voice': voice,
+        }),
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Fetch Failed: ${response.statusText}
+          Status: ${response.status}`);
+        }
+        return response.blob();
+      });
 }
 
 // Gets fetch requirements then returns the text completion data.
