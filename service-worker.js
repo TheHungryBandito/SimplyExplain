@@ -527,16 +527,16 @@ async function processText(text) {
  */
 async function pushNotification(options) {
   return chrome.notifications.create({
-    iconUrl: chrome.runtime.getURL("images/person-raised-hand128.png"),
+    iconUrl: chrome.runtime.getURL('images/person-raised-hand128.png'),
     title: options.title,
     type: options.type,
     message: options.message,
     requireInteraction: options.requireInteraction,
-    buttons: options.buttons
+    buttons: options.buttons,
   })
-    .catch((err) => {
-      console.error("Failed to send notifcation -", err);
-    });
+      .catch((err) => {
+        console.error('Failed to send notifcation -', err);
+      });
 }
 
 // Opens the admin panel as a new tab to the current window.
