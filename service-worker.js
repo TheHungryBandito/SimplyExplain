@@ -117,7 +117,14 @@ async function relaySelectedText() {
   });
 }
 
-// Sets up an offscreen document if one does not already exist.
+/**
+ * Creates a new offscreen if it does not already exist.
+ * @param {string} url The (relative) url of the offscreen document.
+ * @param {string[]} reasons The reasons for creating the offscreen.
+ * @param {string} justification The developer provided justification
+ * for creating the offscreen.
+ * @return {Promise}
+ */
 async function setupOffscreenDocument(url, reasons, justification) {
   if (await hasOffscreenDocument(url)) {
     console.log("Offscreen already exists");
