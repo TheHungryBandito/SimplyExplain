@@ -372,45 +372,46 @@ async function getGPTInstructions() {
  */
 async function fetchCompletionRequestToGPT(instructions, model, text, apiKey) {
   return await fetch(
-    new URL("https://api.openai.com/v1/chat/completions"), {
-    method: 'POST',
-    headers: {
-      'Authorization': "Bearer " + apiKey,
-      'Content-Type': "application/json"
-    },
-    body: JSON.stringify({
-      "model": model,
-      "messages": [
-        {
-          "role": "system",
-          "content": instructions
+      new URL('https://api.openai.com/v1/chat/completions'), {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + apiKey,
+          'Content-Type': 'application/json',
         },
-        {
-          "role": "user",
-          "content": text
+        body: JSON.stringify({
+          'model': model,
+          'messages': [
+            {
+              'role': 'system',
+              'content': instructions,
+            },
+            {
+              'role': 'user',
+              'content': text,
+            },
+          ],
+          'temperature': 0.2,
+        }),
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Fetch Failed: ${response.statusText} 
+          Status: ${response.status}`);
         }
-      ],
-      "temperature": 0.2
-    })
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Fetch Failed: ${response.statusText} Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      if (!data.choices[0]) {
-        throw new Error("GPT could not respond.")
-      }
-      return data;
-    })
-    .catch((err) => {
-      console.error("Failed to send completion request to GPT -", err);
-    });
+        return response.json();
+      })
+      .then((data) => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        if (!data.choices[0]) {
+          throw new Error('GPT could not respond.');
+        }
+        return data;
+      })
+      .catch((err) => {
+        console.error('Failed to send completion request to GPT -', err);
+      });
 }
 
 // Sends API request to TTS model, returns mp3/mpeg blob.
