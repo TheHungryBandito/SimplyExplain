@@ -211,7 +211,7 @@ async function auth() {
 }
 
 // Authenticates user then runs callback.
-async function authFlow(callback) {
+async function authRequired(callback) {
   const userLoggedIn = await isLoggedIn();
   if (!userLoggedIn) {
     auth().then(
