@@ -1,4 +1,6 @@
-// Sets up events/menus for app.
+/**
+ * Creates Commands/Context Menus
+ */
 function setupExtension() {
   // Right-click context menu replaces itself with new selection.
   chrome.contextMenus.removeAll(function () {
