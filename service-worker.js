@@ -361,7 +361,15 @@ async function getGPTInstructions() {
       });
 }
 
-// Sends API request to GPT model, returns text completion.
+/**
+ * Sends a fetch request to OpenAI chat completion GPT with desired
+ * instructions for the input text.
+ * @param {string} instructions The system instructions for the GPT.
+ * @param {string} model The GPT model to use.
+ * @param {string} text The text to process through chat completion.
+ * @param {string} apiKey Open AI API Key.
+ * @return {Promise} A Promise containing the response data.
+ */
 async function fetchCompletionRequestToGPT(instructions, model, text, apiKey) {
   return await fetch(
     new URL("https://api.openai.com/v1/chat/completions"), {
