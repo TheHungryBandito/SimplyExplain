@@ -3,6 +3,11 @@
     "name": "Simply Explain",
     "description": "Explain, re-word, and simplify selected text. GPT powered Assistive Technology.",
     "version": "1.0",
+    "options_page": "./pages/options.html",
+    "options_ui": {
+        "page": "./pages/options.html",
+        "open_in_tab": false
+    },
     "action": {
         "default_title": "Simply Explain",
         "default_icon": "./images/person-raised-hand16.png"
