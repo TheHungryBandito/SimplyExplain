@@ -100,8 +100,8 @@ async function injectFunctionIntoCurrentTab(func) {
  * @return {number | undefined} The current tab id.
  */
 async function getCurrentTabId() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
+  const queryOptions = {active: true, lastFocusedWindow: true};
+  const [tab] = await chrome.tabs.query(queryOptions);
   return tab.id;
 }
 
