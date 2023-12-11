@@ -311,6 +311,19 @@ async function openAITextToSpeech(text, model, voice) {
         console.error('Failed to get OpenAI Text-To-Speech -', err);
       });
 }
+
+/**
+ *
+ * @param {string} text The text to be spoken.
+ * @return {void}
+ */
+async function chromeTextToSpeech(text) {
+  try {
+    chrome.tts.stop();
+    return await chrome.tts.speak(text, {'lang': 'en-US'});
+  } catch (err) {
+    console.error('Could not use chrome TTS to speak -', err);
+  }
 }
 
 // Returns current GPT Instructions.
