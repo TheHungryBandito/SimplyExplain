@@ -543,7 +543,7 @@ async function pushNotification(options) {
  * Opens the admin panel as a new tab in the current window
  */
 async function openAdminPanel() {
-  let currentTab = await chrome.tabs.query({ active: true });
+  const currentTab = await chrome.tabs.query({active: true});
   chrome.tabs.create({
     active: true,
     url: chrome.runtime.getURL("../pages/admin-panel.html"),
