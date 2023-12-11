@@ -235,7 +235,11 @@ async function authRequired(callback) {
   callback();
 }
 
-// Checks if user has previously logged in.
+/**
+ * Checks if user has previously authenticated.
+ * @return {Promise<boolean>} A promise that resloves to true if
+ * user is authenticated or false if not.
+ */
 async function isLoggedIn() {
   return chrome.storage.local.get({
     "UserID": "None"
