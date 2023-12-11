@@ -130,12 +130,12 @@ window.onload = () => {
     }
 
     // Uninstalls the chrome extension from the user's browser
-    function uninstall() {
-        chrome.management.uninstallSelf({
-            showConfirmDialog: true
-        })
+  function uninstall() {
+    chrome.management.uninstallSelf({
+      showConfirmDialog: true,
+    })
         .catch((err) => {
-            console.error("Uninstall failed -", err);
+          console.error('Uninstall failed -', err);
         });
     }
 
