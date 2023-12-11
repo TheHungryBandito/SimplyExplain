@@ -49,6 +49,31 @@ async function handleCommands(command) {
   }
 }
 
+/**
+ * Handles incoming messages from chrome.runtime.
+ * @param {*} message Received message.
+ * @param {chrome.runtime.MessageSender} sender Message sender.
+ * @param {Function} sendResponse Callback to send a response.
+ * @return {void}
+ */
+async function handleMessages(message, sender, sendResponse) {
+  if (message.target !== 'service-worker') {
+    return;
+  }
+
+  switch (message.type) {
+    case 'selectionText':
+      await authRequired(processText.bind(null, message.text));
+      break;
+    case 'openAdminPanel':
+      await authRequired(openAdminPanel);
+      break;
+    case 'speakAgain':
+      await authRequired(speakLastResponse);
+      break;
+  }
+}
+
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
