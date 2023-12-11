@@ -1,12 +1,12 @@
 window.onload = () => {
-    const savePromptBtn = document.getElementById("save-prompt-btn")
-    const saveOptionsBtn = document.getElementById("save-options-btn");
-    const ttsEnabled = document.getElementById("tts-enabled");
-    const ttsModel = document.getElementById("tts-model");
-    savePromptBtn.addEventListener("click", savePrompt)
-    saveOptionsBtn.addEventListener("click", saveOptions);
-    ttsEnabled.addEventListener("click", updateTTSOptions);
-    ttsModel.addEventListener("input", updateTTSOptions);
+  const savePromptBtn = document.getElementById('save-prompt-btn');
+  const saveOptionsBtn = document.getElementById('save-options-btn');
+  const ttsEnabled = document.getElementById('tts-enabled');
+  const ttsModel = document.getElementById('tts-model');
+  savePromptBtn.addEventListener('click', savePrompt);
+  saveOptionsBtn.addEventListener('click', saveOptions);
+  ttsEnabled.addEventListener('click', updateTTSOptions);
+  ttsModel.addEventListener('input', updateTTSOptions);
 
     // Navbar
     const uninstallBtn = document.getElementById("uninstall-btn");
