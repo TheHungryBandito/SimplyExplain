@@ -616,6 +616,21 @@ async function updateHistory(text, response) {
   }
 }
 
+/**
+ * Sends a message to the history page to update the frontend history.
+ */
+async function updateHistoryPage() {
+  try {
+    return await chrome.runtime.sendMessage({
+      text: 'update history',
+      type: 'updateHistory',
+      target: 'chat-history',
+    });
+  } catch (err) {
+    console.warn('Could not send message -', err);
+  }
+}
+
 }
 
 setupExtension();
