@@ -283,10 +283,34 @@ async function handleTextToSpeech(text) {
       });
 }
 
+/**
+ * Executes workflow for Text-To-Speech.
+ * @param {string} text The text to be spoken.
+ * @param {string} model The Text-To-Speech model.
+ * @param {string} voice The desired output voice.
+ * @return {void}
+ */
+async function openAITextToSpeech(text, model, voice) {
+  const key = await getOpenAIKey();
+  await fetchRequestForOpenAITTS(text, model, voice, key)
+      .then(async (blob) => {
+        await setupOffscreenDocument(
+            'pages/audio-playback.html',
+            ['AUDIO_PLAYBACK', 'BLOBS'],
+            'Playing Text-To-Speech',
+        ).then((result) => {
+          if (result === true) {
+            // Slight delay to allow page to subscribe to messages.
+            setTimeout(sendBlobToOffscreen.bind(null, blob), 100);
           }
-        );
-      }
-    });
+        }).catch((err) => {
+          console.error('Failed to setup offscreen for audio -', err);
+        });
+      })
+      .catch((err) => {
+        console.error('Failed to get OpenAI Text-To-Speech -', err);
+      });
+}
 }
 
 // Returns current GPT Instructions.
