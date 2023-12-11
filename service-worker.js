@@ -12,17 +12,17 @@ function setupExtension() {
   });
 
   // Right-click menu behaviour
-  chrome.contextMenus.onClicked.addListener((info, tab) => {
+  chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (tab.url.includes('chrome://')) {
-      sendNotification({
-        title: "Simply Explain - Error",
-        type: "basic",
-        message: "Unable to use extension on 'chrome://' URLs.",
+      await pushNotification({
+        title: 'Simply Explain - Error',
+        type: 'basic',
+        message: 'Unable to use extension on \'chrome://\' URLs.',
         requireInteraction: false,
       });
       return;
     }
-    authFlow(processText.bind(null, info.selectionText));
+    await authRequired(processText.bind(null, info.selectionText));
   });
 
   // Recieve the selected text.
