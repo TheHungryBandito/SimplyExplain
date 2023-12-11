@@ -556,13 +556,13 @@ async function openAdminPanel() {
  * @param {Blob} blob blob to send.
  */
 function sendBlobToOffscreen(blob) {
-  var reader = new FileReader();
+  const reader = new FileReader();
   reader.readAsDataURL(blob);
   reader.onloadend = async function sendDataURLContentToOffscreen() {
     if (!reader.result) {
       return;
     }
-    var base64String = reader.result.split(',')[1];
+    const base64String = reader.result.split(',')[1];
     chrome.runtime.sendMessage({
       text: base64String,
       target: 'offscreen',
