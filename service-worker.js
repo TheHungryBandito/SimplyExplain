@@ -111,8 +111,9 @@ async function getCurrentTabId() {
  */
 async function relaySelectedText() {
   return await chrome.runtime.sendMessage({
-    type: "selectionText",
-    text: getSelection().toString()
+    type: 'selectionText',
+    target: 'service-worker',
+    text: getSelection().toString(),
   });
 }
 
