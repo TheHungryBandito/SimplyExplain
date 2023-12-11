@@ -573,10 +573,6 @@ function sendBlobToOffscreen(blob) {
   };
 }
 
-function uninstall() {
-  chrome.management.uninstallSelf({
-    showConfirmDialog: true
-  });
 }
 
 setupExtension();
