@@ -463,9 +463,6 @@ async function getCompletionResults(text) {
     });
   }
 
-// Processes text through GPT then provides the result via TTS.
-async function processText(text) {
-  await getCompletionResults(text).then(async (data) => {
   const syncStorage = await chrome.storage.sync.get(
       {
         'GPT': 'gpt-3.5-turbo-1106',
@@ -493,12 +490,21 @@ async function processText(text) {
   });
 }
 
+async function processText(text) {
+  await getCompletionResults(text).then(async (data) => {
+    await updateHistory(text, data.choices[0].message.content);
+    await pushNotification({
+      title: 'Simply Explain (Hover for full message)',
+      type: 'basic',
+      message: data.choices[0].message.content,
+      requireInteraction: false,
+      buttons: [{title: 'Close'}],
     });
-    await textToSpeech(data.choices[0].message.content);
+    await handleTextToSpeech(data.choices[0].message.content);
   })
-    .catch((err) => {
-      console.error("Could not process text -", err);
-    });
+      .catch((err) => {
+        console.error('Could not process text -', err);
+      });
 }
 
 async function sendNotification(options) {
