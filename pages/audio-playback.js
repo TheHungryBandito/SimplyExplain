@@ -8,10 +8,9 @@ chrome.runtime.onMessage.addListener(handleMessages);
  * @return {void}
  */
 function handleMessages(message, sender, sendResponse) {
-    if (message.target != 'offscreen') {
-        console.log("Failed");
-        return;
-    }
+  if (message.target != 'offscreen') {
+    return;
+  }
 
     const base64String = message.text;
     const byteCharacters = atob(base64String);
