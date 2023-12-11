@@ -174,7 +174,8 @@ async function hasOffscreenDocument(url) {
  */
 async function auth() {
   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-  const clientID = '849293445118-toonlns3d7fmocfcn4g8qvoc49neqmhn.apps.googleusercontent.com';
+  const clientID = `849293445118-toonlns3d7fmocfcn4g8qvoc49neqmhn.
+  apps.googleusercontent.com`;
   const redirectUrl = `https://${chrome.runtime.id}.chromiumapp.org/`;
   const nonce = Math.random().toString(36).substring(2, 15);
 
@@ -190,22 +191,23 @@ async function auth() {
     interactive: true,
 
   })
-    .then((url) => {
-      const splitURL = url.toString().split("#id_token=");
-      if (splitURL.length < 1) {
-        return false;
-      }
-      return splitURL[1];
-    })
-    .then((idToken) => {
-      if (idToken) {
-        chrome.storage.local.set({ UserID: idToken });
-      } else {
-        throw new Error("OAuth 2.0 Error. Failed to retrieve Id_Token.");
-      }
-    }).catch((err) => {
-      console.error("OAuth 2.0 Error. Could not authenticate user:", err);
-    });
+      .then((url) => {
+        const splitURL = url.toString().split('#id_token=');
+        if (splitURL.length < 1) {
+          return false;
+        }
+        return splitURL[1];
+      })
+      .then((idToken) => {
+        if (idToken) {
+          chrome.storage.local.set({UserID: idToken});
+        } else {
+          throw new Error('OAuth 2.0 Error. Failed to retrieve Id_Token.');
+        }
+        return idToken;
+      }).catch((err) => {
+        console.error('OAuth 2.0 Error. Could not authenticate user:', err);
+      });
 }
 
 // Authenticates user then runs callback.
