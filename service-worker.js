@@ -210,7 +210,11 @@ async function auth() {
       });
 }
 
-// Authenticates user then runs callback.
+/**
+ * Ensures user is authenticated before executing callback.
+ * @param {func} callback The callback function to be called
+ * if user authenticates successfully.
+ */
 async function authRequired(callback) {
   const userLoggedIn = await isLoggedIn();
   if (!userLoggedIn) {
