@@ -596,6 +596,26 @@ async function getOpenAIKey() {
       });
 }
 
+/**
+ * Updates the users chat history.
+ * @param {string} text The user's input text.
+ * @param {string} response The response from GPT.
+ */
+async function updateHistory(text, response) {
+  try {
+    const storage = await loadHistory();
+    const history = storage.History;
+    if (history.length > 5) {
+      await history.pop();
+    }
+    await history.unshift({user: text, response: response});
+    await saveHistory(history);
+    await updateHistoryPage();
+  } catch (err) {
+    console.error('Could not update history -', err);
+  }
+}
+
 }
 
 setupExtension();
