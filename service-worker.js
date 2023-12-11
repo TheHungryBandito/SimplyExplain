@@ -326,7 +326,10 @@ async function chromeTextToSpeech(text) {
   }
 }
 
-// Returns current GPT Instructions.
+/**
+ * Builds the system message from user's settings for GPT chat completions.
+ * @return {Promise<string>} A Promise containing the GPT system instructions.
+ */
 async function getGPTInstructions() {
   return await chrome.storage.sync.get({
     "Persona": "mentor",
