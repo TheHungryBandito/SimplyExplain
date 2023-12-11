@@ -445,7 +445,11 @@ async function fetchRequestForOpenAITTS(text, model, voice, apiKey) {
       });
 }
 
-// Gets fetch requirements then returns the text completion data.
+/**
+ * Handles GPT chat completion.
+ * @param {string} text Text to process.
+ * @return {Promise} A Promise containing GPT response.
+ */
 async function getCompletionResults(text) {
   const instructions = await getGPTInstructions();
   if (!instructions) {
