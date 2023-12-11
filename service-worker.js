@@ -631,6 +631,18 @@ async function updateHistoryPage() {
   }
 }
 
+/**
+ * Loads the chat history from storage.
+ * @return {Promise} A promise containing the storage object.
+ */
+async function loadHistory() {
+  try {
+    return await chrome.storage.local.get(['History']);
+  } catch (err) {
+    console.error('Could not load chat history -', err);
+  }
+}
+
 }
 
 setupExtension();
