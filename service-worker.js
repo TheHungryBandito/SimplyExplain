@@ -657,6 +657,17 @@ async function saveHistory(history) {
   }
 }
 
+/**
+ * Speaks the last response from GPT.
+ */
+async function speakLastResponse() {
+  const storage = await loadHistory();
+  const history = storage.History;
+  if (!history) {
+    await handleTextToSpeech('There is no recent history between us.');
+    return;
+  }
+  await handleTextToSpeech(history[0].response);
 }
 
 setupExtension();
