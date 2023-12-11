@@ -37,6 +37,18 @@ function setupExtension() {
   });
 }
 
+/**
+ * Ensures correct commands are executed.
+ * @param {string} command The executed command.
+ */
+async function handleCommands(command) {
+  switch (command) {
+    case 'explain':
+      await injectFunctionIntoCurrentTab(relaySelectedText);
+      break;
+  }
+}
+
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
