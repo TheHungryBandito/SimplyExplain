@@ -242,16 +242,16 @@ async function authRequired(callback) {
  */
 async function isLoggedIn() {
   return chrome.storage.local.get({
-    "UserID": "None"
+    'UserID': 'None',
   })
-    .then((storage) => {
+      .then((storage) => {
       // If we have a UserID then the user has authenticated.
-      if (storage.UserID !== "None") {
-        return true;
-      } else {
-        return false;
-      }
-    });
+        if (storage.UserID !== 'None') {
+          return true;
+        } else {
+          return false;
+        }
+      });
 }
 
 // Processes text through selected text-to-speech.
