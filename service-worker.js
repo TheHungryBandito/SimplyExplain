@@ -494,6 +494,10 @@ async function getCompletionResults(text) {
   });
 }
 
+/**
+ * Process text through GPT chat completion and Text-To-Speech.
+ * @param {string} text The text to process.
+ */
 async function processText(text) {
   await getCompletionResults(text).then(async (data) => {
     await updateHistory(text, data.choices[0].message.content);
