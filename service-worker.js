@@ -515,7 +515,7 @@ async function processText(text) {
       });
 }
 
-async function sendNotification(options) {
+async function pushNotification(options) {
   return chrome.notifications.create({
     iconUrl: chrome.runtime.getURL("images/person-raised-hand128.png"),
     title: options.title,
