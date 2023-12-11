@@ -573,6 +573,29 @@ function sendBlobToOffscreen(blob) {
   };
 }
 
+/**
+ * Queries storage for OpenAI API Key
+ * @return {Promise<string>} The stored OpenAI API Key.
+ */
+async function getOpenAIKey() {
+  return await chrome.storage.local.get(['OpenAIKey'])
+      .then((storage) => {
+        if (!storage.OpenAIKey) {
+          throw new Error('No api key found.');
+        }
+        return storage.OpenAIKey;
+      })
+      .catch(async (err) => {
+        console.error('Could not retrieve API Key from storage -', err);
+        await pushNotification({
+          title: 'Simply Explain - Error',
+          type: 'basic',
+          message: 'Please set an API Key in the options menu - ' + err,
+          requireInteraction: false,
+        });
+      });
+}
+
 }
 
 setupExtension();
