@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "chrome-types": "^0.1.237",
-    "dotenv": "^16.3.1",
-    "openai": "^4.14.2"
-  }
-}
