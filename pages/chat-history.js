@@ -52,7 +52,7 @@ window.onload = () => {
     let completedHistory = '';
     for (let i = 0; i < history.length; i++) {
       completedHistory = completedHistory.concat(
-          `User: ${history[i].user}\nResponse: ${history[i].response}\n\n`,
+          `Input: ${history[i].user}\nResponse: ${history[i].response}\n\n`,
       );
     }
 
