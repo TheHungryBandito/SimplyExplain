@@ -1,6 +1,6 @@
 window.addEventListener('load', async () => {
-    const historyUpArrow = document.getElementById("history-up-arrow");
-    const historyDownArrow = document.getElementById("history-down-arrow");
+    const upArrow = document.getElementById("up-arrow");
+    const downArrow = document.getElementById("down-arrow");
     const scrollContainers = document.getElementsByClassName("scroll-container");
     const currentIndexArray = [];
     
@@ -13,11 +13,11 @@ window.addEventListener('load', async () => {
         await changeCurrentElement(scrollContainers[i], i, 0);
     }
 
-    historyUpArrow.addEventListener('click', async () => {
+    upArrow.addEventListener('click', async () => {
         await incrementCurrentIndex(scrollContainers[0], 0, -1);
     })
 
-    historyDownArrow.addEventListener('click', async () => {
+    downArrow.addEventListener('click', async () => {
         await incrementCurrentIndex(scrollContainers[0], 0, 1);
     })
 
