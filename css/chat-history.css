@@ -1,0 +1,39 @@
+@import url("main.css");
+@import url("theme.css");
+
+.chat-history-container {
+    padding: 5px;
+    width: 28em;
+    height: 10em;
+    max-height: 28em;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    box-shadow: -5px -5px 10px var(--color-surface-dark) inset, 5px 5px 10px var(--color-surface-dark) inset;
+}
+
+.chat-history-container div {
+    height: 9.5em;
+    width: inherit;
+    max-width: inherit;
+    max-height: 9.5em;
+}
+
+.chat-history-container div h4 {
+    overflow-y: hidden;
+    overflow-x: auto;
+    text-wrap: nowrap;
+}
+
+.chat-history-container div div {
+    overflow-y: auto;
+    height: 6em;
+    width: inherit;
+    max-width: inherit;
+    max-height: 4.25em;
+}
+
+.chat-history-container div div p {
+    text-overflow: ellipsis;
+    max-height: 2em;
+}
+

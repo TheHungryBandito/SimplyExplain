@@ -1,4 +1,4 @@
-window.onload = () => {
+window.addEventListener('load', () => {
   const speakAgainBtn = document.getElementById('speak-again-btn');
   const adminPanelBtn = document.getElementById('admin-panel-btn');
 
@@ -42,21 +42,22 @@ window.onload = () => {
   async function updateHistory() {
     const storage = await loadHistory();
     const history = storage.History;
-    const historyText = document.getElementById('history-text');
-    console.log(history);
+    const historyCards = document.getElementById("history-container").children;
 
     if (history.length < 1) {
+      console.log("No history found.");
       return;
     }
 
-    let completedHistory = '';
     for (let i = 0; i < history.length; i++) {
-      completedHistory = completedHistory.concat(
-          `Input: ${history[i].user}\nResponse: ${history[i].response}\n\n`,
-      );
-    }
+      if (i >= historyCards.length)
+      {
+        break;
+      }
 
-    historyText.textContent = completedHistory;
+      historyCards[i].getElementsByTagName("h4")[0].textContent = history[i].user;
+      historyCards[i].getElementsByTagName("p")[0].textContent = history[i].response;
+    }
   }
 
   /**
@@ -94,4 +95,4 @@ window.onload = () => {
 
 
   updateHistory();
-};
+});
