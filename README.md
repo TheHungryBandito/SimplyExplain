@@ -2,12 +2,14 @@
 
 *Created by Joshua Crews @ 2023*
 
-Video Demo to be released.
-
 Simply Explain is a chrome extension that leverages Open AI's GPT models to assist users with reading and understanding text via Text-To-Speech (TTS).
 
 With the expanding capabiliites of Large-Language-Models (LLM) it is possible to provide more accessibility through assistive technology such as 'Simply Explain'.
 As LLM's are known to have "hallucinations", there is always a chance the response may be incorrect or nonsensical.
+
+## Links
+- #### [Video Preview](https://youtu.be/Y0qP4W0rAm8)
+- #### [Simply Explain Website](https://simply-explain.com)
 
 ## User Flow
 
