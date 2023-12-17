@@ -1,0 +1,112 @@
+:root {
+    --color-primary: #a688fa;
+    --color-secondary: #908d96;
+    --color-surface-dark: #1a1625;
+    --color-surface: #2f2b3a;
+    --color-surface-light: #46424f;
+
+    background-color: var(--color-surface-dark);
+}
+
+body {
+    background-color: inherit;
+}
+
+h1, h2, h3, h4, p {
+    color: white;
+}
+
+textarea {
+    resize: none;
+}
+
+hr {
+    color: var(--color-secondary);
+}
+
+.text-color-primary {
+    color: var(--color-primary);
+}
+
+.text-color-dark {
+    color: var(--color-secondary)
+}
+
+.button-primary {
+    background-color: var(--color-primary) !important;
+    color: var(--color-surface-dark);
+    border-style: none;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-weight: 600;
+    box-shadow: none;
+    transition: filter 0.2s;
+}
+
+.button-primary-small {
+    background-color: var(--color-primary) !important;
+    color: var(--color-surface-dark);
+    border-style: none;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-weight: 600;
+    box-shadow: none;
+    transition: filter 0.2s;
+}
+
+.button-discrete {
+    background: none;
+    color: white;
+    border-style: none;
+    text-decoration: none;
+    transition: 
+        filter 0.2s,
+        color 0.2s;
+}
+
+.button-primary:hover, .button-discrete:hover {
+    filter: brightness(0.85);
+}
+
+.button-primary:hover {
+    box-shadow: 0 0 5px var(--color-primary);
+}
+
+.button-discrete:hover {
+    color: var(--color-primary);
+}
+
+
+.button-primary:active, .button-discrete:active {
+    filter: brightness(0.75);
+}
+
+.button-primary:active {
+    box-shadow: 0 0 5px var(--color-primary);
+}
+
+.button-discrete:active {
+    color: var(--color-primary);
+}
+
+.color-dark {
+    color: var(--color-surface-dark);
+}
+
+.background-primary {
+    background-color: var(--color-primary);
+}
+
+.background-secondary {
+    background-color: var(--color-surface-light);
+}
+
+.background-secondary-alternate {
+    background-color: var(--color-surface);
+}
+
+

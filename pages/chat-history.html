@@ -6,19 +6,53 @@
     <title>History</title>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/chat-history.css">
     <style>
         html {
             min-height: 5em;
             min-width: 40em;
         }
     </style>
-    <script src="../pages/chat-history.js"></script>
 </head>
 <body class="container mt-4 mb-4">
-    <p class="text-color-primary fw-semibold text-uppercase">Simply Explain - Chat history</p>
-    <hr>
-    <div class="row mb-3">
-        <textarea id="history-text" class="form-dark" readonly rows="4" placeholder="I'll show you our previous interactions here..."></textarea>
+    <p class="text-color-primary fw-semibold text-uppercase mb-0">Simply Explain - Chat history</p>
+    <hr class="mt-1 mb-1">
+    <div class="row">
+        <div id="history-container" class="col chat-history-container scroll-container mb-3">
+            <div class="background-secondary-alternate rounded-4 mt-5 mb-3 p-3 primary-shadow-top-bottom">
+                <h4>1</h4>
+                <div>
+                    <p>Explained</p>
+                </div>
+            </div>
+            <div class="background-secondary-alternate rounded-4 mt-2 mb-3 p-3 primary-shadow-top-bottom">
+                <h4>2</h4>
+                <div>
+                    <p>Explained</p>
+                </div>            </div>
+            <div class="background-secondary-alternate rounded-4 mt-2 mb-3 p-3 primary-shadow-top-bottom">
+                <h4>3</h4>
+                <div>
+                    <p>Explained</p>
+                </div>
+            </div>
+            <div class="background-secondary-alternate rounded-4 mt-2 mb-3 p-3 primary-shadow-top-bottom">
+                <h4>4</h4>
+                <div>
+                    <p>Explained</p>
+                </div>
+            </div>
+            <div class="background-secondary-alternate rounded-4 mt-2 mb-5 p-3 primary-shadow-top-bottom">
+                <h4>5</h4>
+                <div>
+                    <p>Explained</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-1 me-4">
+            <button id="history-up-arrow" class="scroll-button button-primary-small pb-4 mt-2 mb-2 rounded-top-5" type="button"><img src="../images/caret-up-fill.svg"></button>
+            <button id="history-down-arrow" class="scroll-button button-primary-small pt-4 mt-2 mb-2 rounded-bottom-5" type="button"><img src="../images/caret-down-fill.svg"></button>
+        </div>
     </div>
     <div class="row">
         <button id="speak-again-btn" class="button-primary col rounded-start-5 border-end-dark" type="button">Speak Last</button>
@@ -26,5 +60,7 @@
     </div>
     <hr>
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../pages/chat-history.js"></script>
+    <script src="../js/scroll-container.js"></script>
 </body>
 </html>
