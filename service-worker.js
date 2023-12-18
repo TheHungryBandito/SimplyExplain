@@ -204,9 +204,10 @@ async function auth() {
         } else {
           throw new Error('OAuth 2.0 Error. Failed to retrieve Id_Token.');
         }
-        return idToken;
+        resolve(idToken);
       }).catch((err) => {
         console.error('OAuth 2.0 Error. Could not authenticate user:', err);
+        reject(err);
       });
 }
 
