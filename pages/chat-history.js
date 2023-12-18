@@ -44,12 +44,12 @@ window.addEventListener('load', () => {
     const history = storage.History;
     const historyCards = document.getElementById("history-container").children;
 
-    if (history.length < 1) {
+    if (history?.length < 1) {
       console.log("No history found.");
       return;
     }
 
-    for (let i = 0; i < history.length; i++) {
+    for (let i = 0; i < history?.length; i++) {
       if (i >= historyCards.length)
       {
         break;
