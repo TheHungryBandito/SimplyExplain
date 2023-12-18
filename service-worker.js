@@ -605,10 +605,10 @@ async function updateHistory(text, response) {
   try {
     const storage = await loadHistory();
     const history = storage.History;
-    if (history.length > 5) {
+    if (history?.length > 5) {
       await history.pop();
     }
-    await history.unshift({user: text, response: response});
+    await history?.unshift({user: text, response: response});
     await saveHistory(history);
     await updateHistoryPage();
   } catch (err) {
