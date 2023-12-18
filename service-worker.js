@@ -173,10 +173,9 @@ async function hasOffscreenDocument(url) {
  * the authenticated user.
  */
 async function auth() {
-  const clientID = `849293445118-toonlns3d7fmocfcn4g8qvoc49neqmhn.
-  apps.googleusercontent.com`;
   
   const authUrl = new URL('https://accounts.google.com/o/oauth2/auth');
+  const clientID = `849293445118-toonlns3d7fmocfcn4g8qvoc49neqmhn.apps.googleusercontent.com`;
   const redirectUrl = `https://${chrome.runtime.id}.chromiumapp.org/`;
   const nonce = Math.random().toString(36).substring(2, 15);
 
