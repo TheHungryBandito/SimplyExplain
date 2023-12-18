@@ -351,11 +351,12 @@ async function getGPTInstructions() {
         return botOptions;
       })
       .then((botOptions) => {
-        return `You are a/an ${botOptions.Persona} and ${botOptions.BotAction}
-        the user provides at a/an ${botOptions.ReadingLevel} level of the
-        topic. Limit responses to ${botOptions.WordLimit} words.
-        In the event that you can not provide an answer,
-        only apologize and ask for more context.`;
+        return `You are a/an ${botOptions.Persona} who must ${botOptions.BotAction}
+        the text at ${botOptions.ReadingLevel} level of the concept.
+        Limit responses to ${botOptions.WordLimit} words.
+        Avoid using 'like' comparisons.
+        If you are unable to understand the concept of the text, explain the word or text as it is.
+        Never respond directly to the user.`;
       })
       .catch((err) => {
         console.error('Could not create GPT Instructions', err);
