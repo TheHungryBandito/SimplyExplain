@@ -1,3 +1,6 @@
+# Custom
+*.crx
+
 # Logs
 logs
 *.log
