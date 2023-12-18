@@ -173,9 +173,9 @@ async function hasOffscreenDocument(url) {
  * the authenticated user.
  */
 async function auth() {
-  const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-  const clientID = `849293445118-toonlns3d7fmocfcn4g8qvoc49neqmhn.
-  apps.googleusercontent.com`;
+  
+  const authUrl = new URL('https://accounts.google.com/o/oauth2/auth');
+  const clientID = `849293445118-toonlns3d7fmocfcn4g8qvoc49neqmhn.apps.googleusercontent.com`;
   const redirectUrl = `https://${chrome.runtime.id}.chromiumapp.org/`;
   const nonce = Math.random().toString(36).substring(2, 15);
 
@@ -204,9 +204,10 @@ async function auth() {
         } else {
           throw new Error('OAuth 2.0 Error. Failed to retrieve Id_Token.');
         }
-        return idToken;
+        resolve(idToken);
       }).catch((err) => {
         console.error('OAuth 2.0 Error. Could not authenticate user:', err);
+        reject(err);
       });
 }
 
@@ -350,11 +351,12 @@ async function getGPTInstructions() {
         return botOptions;
       })
       .then((botOptions) => {
-        return `You are a/an ${botOptions.Persona} and ${botOptions.BotAction}
-        the user provides at a/an ${botOptions.ReadingLevel} level of the
-        topic. Limit responses to ${botOptions.WordLimit} words.
-        In the event that you can not provide an answer,
-        only apologize and ask for more context.`;
+        return `You are a/an ${botOptions.Persona} who must ${botOptions.BotAction}
+        the text at ${botOptions.ReadingLevel} level of the concept.
+        Limit responses to ${botOptions.WordLimit} words.
+        Avoid using 'like' comparisons.
+        If you are unable to understand the concept of the text, explain the word or text as it is.
+        Never respond directly to the user.`;
       })
       .catch((err) => {
         console.error('Could not create GPT Instructions', err);
@@ -605,10 +607,10 @@ async function updateHistory(text, response) {
   try {
     const storage = await loadHistory();
     const history = storage.History;
-    if (history.length > 5) {
+    if (history?.length > 5) {
       await history.pop();
     }
-    await history.unshift({user: text, response: response});
+    await history?.unshift({user: text, response: response});
     await saveHistory(history);
     await updateHistoryPage();
   } catch (err) {
