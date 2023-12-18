@@ -606,7 +606,7 @@ async function getOpenAIKey() {
 async function updateHistory(text, response) {
   try {
     const storage = await loadHistory();
-    const history = storage.History;
+    const history = storage.History || [];
     if (history?.length > 5) {
       await history.pop();
     }
